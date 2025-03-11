@@ -50,6 +50,12 @@ scp ~/.ssh/ansible.pub usuario@servidor:~/
 cat ~/ansible.pub >> ~/.ssh/authorized_keys
 ```
 
+ou
+
+```
+ssh -i ~/.ssh/ansible usuario@servidor
+```
+
 * Configure ~/.ssh/config
 
 Host servidor
