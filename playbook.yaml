@@ -1,0 +1,17 @@
+---
+- name: Install Nginx and configure it
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    - name: Copy Nginx configuration file
+      copy:
+        src: index.nginx-debian.html
+        dest: /var/www/html/index.nginx-debian.html
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started

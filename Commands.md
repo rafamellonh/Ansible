@@ -20,3 +20,7 @@ ansible all -i hosts -m apt -a "name=nginx state=absent" -b --ask-become-pass
 ansible all -i hosts -m apt -a "name=nginx state=present" -b --ask-become-pass
 
 ansible all -i hosts -m service -a "name=nginx state=stopped" -b --ask-become-pass
+
+ansible all -i hosts -m copy -a "src=index.nginx-debian.html dest=/var/www/html/index.nginx-debian.html" -b --ask-become-pass
+
+ansible-playbook -i hosts playbook
