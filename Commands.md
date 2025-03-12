@@ -12,3 +12,11 @@ ansible all -i hosts --list-hosts
 ansible web -i hosts -m ping
 
 ansible all -i hosts -m copy -a "src=/ansible/arquivo.txt dest=/home/rafael/arquivo.txt"
+
+ansible all -i hosts -m apt -a "name=nginx update_cache=yes"
+ansible all -i hosts -m apt -a "name=nginx update_cache=yes" -b --ask-become-pass
+
+ansible all -i hosts -m apt -a "name=nginx state=absent" -b --ask-become-pass
+ansible all -i hosts -m apt -a "name=nginx state=present" -b --ask-become-pass
+
+ansible all -i hosts -m service -a "name=nginx state=stopped" -b --ask-become-pass
