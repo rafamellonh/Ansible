@@ -1,0 +1,21 @@
+all:
+  hosts:
+    192.168.1.210:
+    192.168.1.178:
+  vars:
+    ansible_ssh_private_key_file: /home/rafael/.ssh/ansible
+    ansible_user: rafael
+  children:
+    web:
+      hosts:
+        192.168.1.210:
+      vars:
+        ansible_ssh_private_key_file: /home/rafael/.ssh/ansible
+        ansible_user: rafael
+    db:
+      hosts:
+        192.168.1.178:
+      vars:
+        ansible_ssh_private_key_file: /home/rafael/.ssh/ansible
+        ansible_user: rafael
+  
