@@ -1,7 +1,38 @@
 ---
+- name: Create user mello
+  hosts: all
+  become: true
+  remote_user: rafael
+  tasks:
+    - name: Create user mello
+      user:
+        name: mello
+        state: present
+        groups: sudo
+        append: yes
+        password: abc,123
+        shell: /bin/bash
+    - name: Create ssh directory
+      file:
+        path: /home/mello/.ssh
+        state: directory
+        owner: mello
+        group: mello
+        #mode: 0700
+        recurse: true
+    - name: Copy ssh key
+      copy:
+        src: /home/rafael/.ssh/ansible.pub
+        dest: /home/mello/.ssh/authorized_keys
+        owner: mello
+        group: mello
+        mode: 0600
+
+
 - name: Install Nginx and configure it
   hosts: all
   become: true
+  remote_user: rafael
   tasks:
     - name: Install Nginx
       apt:
