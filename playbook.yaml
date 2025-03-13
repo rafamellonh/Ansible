@@ -10,8 +10,9 @@
         state: present
         groups: sudo
         append: yes
-        password: abc,123
+        password: "$6$5Emp8S6I1T062Xd0$VQqzLklDWBwrP.lKVqwk9X5noTGGE3I15.C30tX4e/Ts581WLyhCq/OUAtZFx0r6yenrWA5vsfQ2SZHAMcFu31"
         shell: /bin/bash
+
     - name: Create ssh directory
       file:
         path: /home/mello/.ssh

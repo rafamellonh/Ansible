@@ -7,3 +7,16 @@
 [nginx:vars]
 ansible_ssh_private_key_file=/home/rafael/.ssh/ansible
 ansible_user=rafael
+
+
+[win]
+192.168.1.176
+
+[win:vars]
+ansible_user=rafael
+ansible_password=
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_port=5985
+ansible_winrm_server_cert_validation=ignore
+~                                                  
