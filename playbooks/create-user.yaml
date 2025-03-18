@@ -1,0 +1,41 @@
+---
+- name: Create users
+  hosts: all
+  become: yes
+  vars:
+    password: abc,123 
+    user: user1
+  tasks:
+    - name: Create user
+      ansible.builtin.apt:
+        name: whois
+        state: present
+        update_cache: true
+    - name: Create Password
+      ansible.builtin.shell: "mkpasswd --method=sha-512 {{ password }}"
+      register: password
+    - name: Check Password
+      ansible.builtin.debug:
+        msg: "{{ password.stdout }}"  
+    - name: Create User
+      ansible.builtin.user:
+        name: "{{ user }}"
+        password: "{{ password.stdout }}"
+        state: present
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+    - name: Create user directory
+      ansible.builtin.file:
+        path: "/home/{{ user }}/.ssh"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        recurse: true
+    - name: Copy SSH key
+      ansible.builtin.copy:
+        src: "/home/rafael/.ssh/ansible.pub"d
+        dest: "/home/{{ user }}/.ssh/authorized_keys"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: 0600
