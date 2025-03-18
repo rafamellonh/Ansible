@@ -1,0 +1,14 @@
+---
+- name: Listar VMs no Hyper-V
+  hosts: windows
+  tasks:
+    - name: Obter lista de VMs
+      ansible.windows.win_powershell:
+        script: |
+          Get-VM | Select-Object -ExpandProperty Name
+
+      register: vm_output
+
+    - name: Exibir resultado
+      ansible.builtin.debug:
+        msg: " {{ vm_output }} "
