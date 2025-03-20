@@ -1,0 +1,22 @@
+---
+- name: Install nginx
+  hosts: linux
+  become: yes
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    - name: Start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+    - name: Copy index.html
+      ansible.builtin.copy:
+        src: /home/rafael/index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
