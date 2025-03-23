@@ -5,6 +5,29 @@
     - vars.yaml
   tasks:
     - name: Rename computer
-      ansible.windows.win_powershell:
+      win_powershell:
         script: |
           Rename-Computer -NewName {{ name_vm03 }} -Force -restart
+
+    - name: Set timezone
+      win_timezone:
+        timezone: Eastern Standard Time
+    
+    - name: Create user
+      win_user:
+        name: "{{ user_admin }}"
+        password: "{{ user_password }}"
+        state: present
+        groups: Administrators
+
+    - name: Create folder
+      win_file:
+        name: "{{ directory }}"
+        state: directory
+
+    - name: Install win_updates
+      win_updates:
+        category_names: SecurityUpdates
+        state: installed
+        reboot: yes
+        log_path: "{{ directory }}/wu.log"
