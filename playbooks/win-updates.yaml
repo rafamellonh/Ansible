@@ -13,3 +13,9 @@
       debug:
         msg: "{{ item.value.kb }}"
       loop: "{{ wu_output.updates | dict2items }}"
+
+    - name: Copy log file
+      fetch:
+        src: C:\ansible_wu.txt
+        dest: /home/rafael/ansible_wu.txt
+        flat: yes
