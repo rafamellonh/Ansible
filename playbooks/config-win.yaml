@@ -1,0 +1,10 @@
+---
+- name: Configure windows
+  hosts: all
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Rename computer
+      ansible.windows.win_powershell:
+        script: |
+          Rename-Computer -NewName {{ name_vm03 }} -Force -restart
