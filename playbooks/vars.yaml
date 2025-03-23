@@ -3,3 +3,10 @@ name_vm03: LAB-ANSIBLE-VM03-WIN
 user_admin: rafael
 user_password: abc,123
 directory: C:\ansible
+
+#Domain
+domain: rafaelmellonh.com.br
+dns_domain_name: rafaelmellonh.com.br
+domain_admin_user: Administrator@rafaelmellonh.com.br
+domain_admin_password: "abc,1234"
+domain_ou_path: OU=LAB,DC=rafaelmellonh,DC=com,DC=br

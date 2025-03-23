@@ -5,7 +5,7 @@
     - vars.yaml
   tasks:
     - name: Rename computer
-      win_powershell:
+      ansible.windows.win_powershell:
         script: |
           Rename-Computer -NewName {{ name_vm03 }} -Force -restart
 
@@ -31,3 +31,13 @@
         state: installed
         reboot: yes
         log_path: "{{ directory }}/wu.log"
+
+    - name: Join domain
+      microsoft.ad.membership:
+        dns_domain_name: "{{ dns_domain_name }}"
+        hostname: "{{ name_vm03 }}"
+        domain_admin_user: "{{ domain_admin_user }}"
+        domain_admin_password: "{{ domain_admin_password }}"
+        domain_ou_path: "{{ domain_ou_path }}"
+        state: domain
+        reboot: true
