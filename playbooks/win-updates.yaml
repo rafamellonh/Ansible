@@ -1,0 +1,15 @@
+---
+- name: Get windows updates
+  hosts: all
+  tasks:
+    - name: Get windows updates
+      win_updates:
+        category_names: SecurityUpdates
+        state: searched
+        log_path: C:\ansible_wu.txt
+      register: wu_output
+
+    - name: Show result
+      debug:
+        msg: "{{ item.value.kb }}"
+      loop: "{{ wu_output.updates | dict2items }}"
