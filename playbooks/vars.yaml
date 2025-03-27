@@ -14,6 +14,6 @@ domain_ou_path: OU=LAB,DC=rafaelmellonh,DC=com,DC=br
 #Zabbix
 zabbix_url: "http://192.168.1.200/api_jsonrpc.php"  # IP do servidor Zabbix
 zabbix_user: "Admin"
-zabbix_password: "zabbix"
+zabbix_password: "x"
 host_name: "LAB-ANSIBLE-VM03-WIN"
 host_ip: "192.168.1.180"
