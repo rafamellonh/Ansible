@@ -9,6 +9,11 @@
         script: |
           Rename-Computer -NewName {{ name_vm03 }} -Force -restart
 
+    - name: Set ExecutionPolicy
+      ansible.windows.win_powershell:
+        script: |
+          Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
+        
     - name: Set timezone
       win_timezone:
         timezone: Eastern Standard Time

@@ -24,3 +24,5 @@ ansible all -i hosts -m service -a "name=nginx state=stopped" -b --ask-become-pa
 ansible all -i hosts -m copy -a "src=index.nginx-debian.html dest=/var/www/html/index.nginx-debian.html" -b --ask-become-pass
 
 ansible-playbook -i hosts playbook
+
+ansible all -i hosts.win -m ansible.windows.win_shell -a "Get-ExecutionPolicy -List"

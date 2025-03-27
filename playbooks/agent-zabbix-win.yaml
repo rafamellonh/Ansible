@@ -1,0 +1,122 @@
+---
+- name: Install Zabbix Agent windows
+  hosts: all
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Create directory temp
+      win_file:
+        name: C:\temp
+        state: directory
+
+    - name: Download Zabbix Agent
+      win_get_url:
+        url: https://cdn.zabbix.com/zabbix/binaries/stable/6.0/6.0.20/zabbix_agent-6.0.20-windows-amd64-openssl.msi
+        dest: "C:\\temp\\zabbix_agent-6.0.20-windows-amd64-openssl.msi"
+
+    - name: Install Zabbix Agent
+      win_package:
+        path: "C:\\temp\\zabbix_agent-6.0.20-windows-amd64-openssl.msi"
+        state: present
+        arguments: "/quiet /L*v C:\\temp\\zabbix_install.log SERVER=192.168.1.100"
+
+    - name: Copy config file
+      win_copy:
+        src: ../files/zabbix_agentd.conf
+        dest: "C:\\Program Files\\Zabbix Agent\\zabbix_agentd.conf"
+      
+    - name: Obter token de autenticação da API do Zabbix
+      uri:
+        url: "{{ zabbix_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          jsonrpc: "2.0"
+          method: "user.login"
+          params:
+            user: "{{ zabbix_user }}"
+            password: "{{ zabbix_password }}"
+          id: 1
+          auth: null
+      register: login_response
+
+    - name: Definir variável com o token de autenticação
+      set_fact:
+        zabbix_api_token: "{{ login_response.json.result }}"
+
+    - name: Obter ID do grupo "Windows Servers"
+      uri:
+        url: "{{ zabbix_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          jsonrpc: "2.0"
+          method: "hostgroup.get"
+          params:
+            output: ["groupid"]
+            filter:
+              name: ["Windows Servers"]  # Nome do grupo no Zabbix
+          auth: "{{ zabbix_api_token }}"
+          id: 2
+      register: group_response
+
+    - name: Definir variável com o ID do grupo
+      set_fact:
+        groupid: "{{ group_response.json.result[0].groupid }}"
+
+    - name: Obter ID do template "Template OS Windows"
+      uri:
+        url: "{{ zabbix_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          jsonrpc: "2.0"
+          method: "template.get"
+          params:
+            output: ["templateid"]
+            filter:
+              name: ["Template OS Windows"]  # Nome do template no Zabbix
+          auth: "{{ zabbix_api_token }}"
+          id: 3
+      register: template_response
+
+    - name: Definir variável com o ID do template
+      set_fact:
+        templateid: "{{ template_response.json.result[0].templateid }}"
+
+    - name: Criar host no Zabbix
+      uri:
+        url: "{{ zabbix_url }}"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          jsonrpc: "2.0"
+          method: "host.create"
+          params:
+            host: "{{ host_name }}"
+            interfaces:
+              - type: 1
+                main: 1
+                useip: 1
+                ip: "{{ host_ip }}"
+                dns: ""
+                port: "10050"
+            groups:
+              - groupid: "{{ groupid }}"
+            templates:
+              - templateid: "{{ templateid }}"
+          auth: "{{ zabbix_api_token }}"
+          id: 4
+      register: result
+
+    - name: Exibir resposta da API
+      debug:
+        var: result
