@@ -8,7 +8,7 @@
     
     ```rafael ALL=(ALL) NOPASSWD: ALL```
 
-*   Ou adicione ao grupo whell e descomente uma linha no arquivo /etc/sudoers
+*  Ou adicione ao grupo whell e descomente uma linha no arquivo /etc/sudoers
 
     ``` 
     sudo usermod -aG wheel rafael 
