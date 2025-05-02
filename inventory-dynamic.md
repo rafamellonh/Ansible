@@ -37,3 +37,5 @@ groups:
   vm_folders: true
   vm_guest_id: true
 ```
+
+ansible-inventory -i inventory/myazure_rm.yml --graph
