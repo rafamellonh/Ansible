@@ -1,6 +1,6 @@
-ansible_user: rafael
-ansible_password: Brasil2014
+ansible_user: user01
+ansible_password: abc,123
 ansible_connection: winrm
 ansible_port: 5985
-ansible_winrm_transport: basic
+ansible_winrm_transport: ntlm
 ansible_winrm_server_cert_validation: ignore

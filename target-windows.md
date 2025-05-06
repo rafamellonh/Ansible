@@ -2,6 +2,8 @@
 * HTTP : 5985
 * HTTPS: 5986
 
+# OBS
+* Use NTLM e nao BASIC para computadores fora do dominio e no dominio use Kerberos
 
 # Validando pré-requisitos (Executar comandos abaixo no PowerShell como Administrator):
 
@@ -51,3 +53,29 @@ winrm quickconfig -force
 Set-Item -Path WSMan:\localhost\Service\Auth\Basic -Value $true
 Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value $true
 Restart-Service WinRM
+
+
+# Kerberos : 
+
+1. Pré-requisitos no Ubuntu
+
+a) Instalar dependências
+```
+
+sudo apt update
+sudo apt install -y python3-venv python3-dev gcc libkrb5-dev krb5-user
+```
+
+
+b) Criar ambiente virtual (recomendado)
+
+```
+python3 -m venv ~/.venvs/ansible-kerberos
+source ~/.venvs/ansible-kerberos/bin/activate
+```
+
+c) Instalar o Ansible e pacotes necessários
+
+```
+pip install ansible pywinrm[kerberos]
+```
