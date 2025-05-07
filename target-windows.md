@@ -79,3 +79,13 @@ c) Instalar o Ansible e pacotes necessários
 ```
 pip install ansible pywinrm[kerberos]
 ```
+
+# Erro  :
+
+<192.168.1.240> ESTABLISH WINRM CONNECTION FOR USER: administrator@RAFAELMELLONH.COM.BR on PORT 5985 TO 192.168.1.240
+windows01 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "kerberos: authGSSClientStep() failed: (('Unspecified GSS failure.  Minor code may provide more information', 851968), ('Server not found in Kerberos database', -1765328377))",
+    "unreachable": true
+}
+
