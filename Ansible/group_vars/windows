@@ -1,4 +1,3 @@
-# group_vars/windows.yml
 ansible_user: administrator@RAFAELMELLONH.COM.BR
 ansible_password: "abc,123"
 ansible_connection: winrm

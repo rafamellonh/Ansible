@@ -5,4 +5,5 @@ ubuntu01 ansible_host=192.168.1.220
 ubuntu02 ansible_host=192.168.1.221
 
 [windows]
-windows01 ansible_host=192.168.1.240 ansible_kerberos_hostname_override=windows01.rafaelmellonh.com.br
+windows01.rafaelmellonh.com.br ansible_host=192.168.1.240
+
