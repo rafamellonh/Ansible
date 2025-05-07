@@ -1,0 +1,12 @@
+---
+- name: Update Linux Server - Ubuntu
+  hosts: debian
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Nginx
+      ansible.builtin.apt:
+       name: nginx
+       state: absent
