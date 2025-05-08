@@ -1,0 +1,17 @@
+---
+- name: Testando variaveis
+  hosts: debian
+  vars:
+    message: "Mensagem de teste atraves de variaveis"
+    packeges: 
+      - nginx
+      - net-tools
+  tasks:
+    - name: DEBUG
+      ansible.builtin.debug:
+        msg: "{{ message }}"
+
+    - name: Install apps
+      ansible.builtin.apt:
+        name: "{{ packeges }}"
+        state: present

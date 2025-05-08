@@ -13,5 +13,8 @@ ansible ubuntu01 -m debug -a var=http_port
 
 ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b
 ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --syntax-check
+ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --list-hosts
+ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --list-tasks
+ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --tag update
 
 ```
