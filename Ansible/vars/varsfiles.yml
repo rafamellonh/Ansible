@@ -1,0 +1,7 @@
+packages:
+  #- httpd
+  - nginx
+  - net-tools
+  - tcpdump
+
+message: "Mensagem de teste atraves de arquivo de variaveis"

@@ -1,0 +1,13 @@
+---
+- name: Testando variaveis
+  hosts: debian
+  vars_files: /data/Ansible/vars/varsfiles.yml
+  tasks:
+    - name: DEBUG
+      ansible.builtin.debug:
+        msg: "{{ ansible_all_ipv4_addresses }}"
+
+    - name: Install apps
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
