@@ -1,0 +1,28 @@
+---
+- name: Testando variaveis
+  hosts: debian
+  vars_prompt:
+    - name: username
+      prompt: "What is your user?"
+      private: false
+    - name: password
+      prompt: "What is your password?"
+      private: true
+      encrypt: "md5_crypt"
+      confirm: true
+      salt_size: 7
+    - name: shell
+      prompt: "What is your shell?"
+      private: false
+  tasks:
+    - name: What
+      ansible.builtin.debug:
+        msg: "User {{ username }} | Password {{ password}} | shell {{ shell }}"
+    - name: User | ADD
+      user:
+        name: "{{ username }}"
+        comment: "{{ User created by Ansible }}"
+        password: "{{ password }}"
+        shell: "{{ shell }}"
+        home: "/home/{{ username }}"
+        state: present

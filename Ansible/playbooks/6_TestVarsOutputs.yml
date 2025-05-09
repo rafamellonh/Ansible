@@ -1,0 +1,29 @@
+---
+
+- name: Ansible Register
+  hosts: debian
+  tasks:
+  - name: CREATE FILES
+    copy:
+      content: "SISOP"
+      dest: "/tmp/{{ item }}.txt"
+    loop:
+      - file1
+      - file2
+      - file3
+    tags: create_files
+
+  - name: SISOP | Find Files
+    find:
+      path: /tmp
+      patterns: "*.txt"
+    register: output  #VARIAVEL
+    tags: find_files
+
+
+  - name: SISOP | Show Files
+    debug:
+      msg: "{{ output.files }}"
+      #msg: "{{ output.files | map(attribute='path') | list }}"
+    tags: show_files
+ 
