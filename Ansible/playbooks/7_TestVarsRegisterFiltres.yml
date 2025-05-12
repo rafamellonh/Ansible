@@ -1,0 +1,20 @@
+---
+
+- name: Ansible register filters
+  hosts: debian
+  tasks:
+    - name: SISOP | Find files
+      find:
+        path: /tmp
+        patterns: "*.txt"
+      register: output
+
+    - name: SISOP | Print files
+      debug:
+        msg: "{{ output.files | map(attribute='path')}} " # pega o resultado da variavel output e filtra o atributo path
+
+    - name: SISOP | Save resultado
+      copy:
+        content: "{{ output.files | map(attribute='path')  | list | to_nice_json }}"
+        dest: /tmp/resultado.json
+      delegate_to: localhost
