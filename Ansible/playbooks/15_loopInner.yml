@@ -1,0 +1,15 @@
+---
+- name: Ansible loop control
+  hosts: debian
+  tasks:
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - vim
+        - curl
+      loop_control:
+        pause: 3 # pause for 3 seconds between each iteration
+    

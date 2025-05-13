@@ -1,0 +1,14 @@
+---
+
+- name: Ansible Loop
+  hosts: debian
+  tasks:
+    - name: ADD user
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        groups: "sudo"
+      loop: 
+        - mello01
+        - mello02
+        - mello03

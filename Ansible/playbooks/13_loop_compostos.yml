@@ -1,0 +1,16 @@
+---
+
+- name: Ansible Loop
+  hosts: debian
+  tasks:
+    - name: ADD user
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+        comment: "{{ item.comment }}"
+        shell: "{{ item.shell }}"
+        groups: "sudo"
+      loop: 
+        - { name: 'mello01', comment: 'Mello 01', shell: '/bin/bash' }
+        - { name: 'mello02', comment: 'Mello 02', shell: '/bin/bash' }
+        - { name: 'mello03', comment: 'Mello 03', shell: '/bin/sh' }

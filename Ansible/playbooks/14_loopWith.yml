@@ -1,0 +1,13 @@
+---
+
+- name: Ansible loop
+  hosts: debian
+  tasks:
+    - name: Copy files
+      ansible.builtin.copy:
+        src: "{{ item.scr }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { scr: /tmp/1.txt, dest: /tmp/1.txt }
+        - { scr: /tmp/2.txt, dest: /tmp/2.txt }
+        - { scr: /tmp/3.txt, dest: /tmp/3.txt }
