@@ -1,0 +1,18 @@
+---
+
+- name: Ansible Conditional Bool
+  hosts: debian
+  vars:
+    backup: true
+    snapshot: false
+  tasks:
+    - name: Run the task if 'backup' is true
+      ansible.builtin.debug:
+        msg: "Congratulation! Backup is true" 
+      when: backup | bool
+
+    - name: Run the task if 'backup' is false
+      ansible.builtin.debug:
+        msg: "Critical! Backup is false" 
+      when: not backup    
+    

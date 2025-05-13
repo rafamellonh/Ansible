@@ -1,0 +1,17 @@
+---
+
+- name: Ansible Stat
+  hosts: debian
+  tasks:
+    - name: Verificando se o arquivo existe
+      ansible.builtin.stat: 
+        path: /tmp/ansible.cfg
+      register: files
+
+    - debug:
+        msg: "O arquivo existe"
+      when: files.stat.exists
+
+    - debug:
+        msg: "O arquivo não existe"
+      when: files.stat.exists == false

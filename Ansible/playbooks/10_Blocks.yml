@@ -1,0 +1,23 @@
+---
+- name: Ansible Playbook with Blocks
+  hosts: debian
+  tasks:
+    - block:
+        - ansible.builtin.debug:
+            msg: "EXECUTADO NORMALMENTE"
+        - name: Simulando erros 
+          ansible.builtin.command: ./configure
+          args:
+            chdir: /tmp
+        - ansible.builtin.debug:
+            msg: "NUNCA SERA EXECUTADO"
+
+      rescue:
+        - ansible.builtin.debug:
+            msg: "ERRO - FALHA NO TARGET {{ inventory_hostname }}"
+      always:
+       - name: SISOP | Update system
+         ansible.builtin.apt:
+           name: "*"
+           state: latest
+           update_cache: yes

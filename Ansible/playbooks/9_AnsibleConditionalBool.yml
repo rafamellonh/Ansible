@@ -3,7 +3,7 @@
 - name: Ansible Conditional Bool
   hosts: debian
   vars:
-    backup: false
+    backup: true
     snapshot: false
   tasks:
     - name: Run the task if 'backup' or 'snapshot' is true
