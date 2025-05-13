@@ -1,0 +1,12 @@
+---
+
+- name: Ansible Conditional Bool
+  hosts: debian
+  vars:
+    backup: false
+    snapshot: false
+  tasks:
+    - name: Run the task if 'backup' or 'snapshot' is true
+      debug:
+        msg: "Snapshot not is backup" 
+      when: backup or snapshot | bool

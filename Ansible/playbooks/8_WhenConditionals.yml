@@ -1,0 +1,20 @@
+---
+
+- name: Ansible conditionals (when)
+  hosts: all
+  tasks:
+    - name: APT | Update system
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+      register: apt_update
+
+    - name : DNF | Update system
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Fedora" or ansible_distribution == "CentOS"
+      register: dnf_update  
