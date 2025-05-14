@@ -1,6 +1,0 @@
----
-- name: Ansible loop Inner
-  hosts: debian
-  tasks:
-    - include_tasks: inner.yml
- 

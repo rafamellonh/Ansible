@@ -1,0 +1,19 @@
+---
+- name: Ansible Handlers
+  hosts: debian
+  become: true
+  tasks:
+    - name: NGINX | Change NGINX configuration Listener
+      ansible.builtin.replace:
+        path: /etc/nginx/sites-available/default
+        regexp: 'listen 80 default_server;'
+        replace: 'listen {{ ansible_default_ipv4.address }}:80 default_server;'
+      notify: Restart NGINX
+
+  handlers:
+    - name: Restart NGINX
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        #enable: true
+      listen: "NGINX | Change NGINX configuration Listener"\

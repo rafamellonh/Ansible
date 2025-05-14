@@ -1,0 +1,10 @@
+---
+- name: Ansible With_sequence
+  hosts: debian
+  tasks:
+    - name: ADD User
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        groups: sudo
+      with_sequence: start=1 end=5 format="user%x"

@@ -10,7 +10,7 @@
     - name: Install Nginx
       ansible.builtin.apt:
         name: nginx
-        state: absent
+        state: present
       tags: 
       -  nginx
       -  httpd
