@@ -1,0 +1,7 @@
+---
+
+- name: Main Playbook
+  hosts: all
+  roles:
+    - role: system-update
+      tags: update

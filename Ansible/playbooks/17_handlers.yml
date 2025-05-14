@@ -16,4 +16,4 @@
         name: nginx
         state: restarted
         #enable: true
-      listen: "NGINX | Change NGINX configuration Listener"\
+      listen: "NGINX | Change NGINX configuration Listener"
