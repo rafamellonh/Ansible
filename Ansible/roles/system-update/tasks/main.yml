@@ -1,9 +1,41 @@
----
 
+#Install packages
+- name: Install packages {{ packages }}
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  tags:
+    - packages
+
+#Update the system
+  when: ansible_os_family == "Debian"
 - name: Udate RedHat Systems
   import_tasks: update_redhat.yml
   when: ansible_os_family == "RedHat"
+  tags:
+    - update-redhat
 
 - name: Udate debian Systems
   import_tasks: update_debian.yml
   when: ansible_os_family == "Debian"
+  tags:
+    - update-debian
+
+- name: Copy files
+  ansible.builtin.copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'file1.conf', dest: '/tmp/file1.conf' }
+    - { src: 'file2.conf', dest: '/tmp/file2.conf' }
+    - { src: 'file3.conf', dest: '/tmp/file3.conf' }
+  tags: copy
+
+- name: Extract files
+  ansible.builtin.unarchive:
+    src:  files.zip
+    dest: /tmp/
+  tags: extract
+
+
+

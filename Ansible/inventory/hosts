@@ -1,5 +1,5 @@
-[windows]
-windows01.rafaelmellonh.com.br ansible_host=192.168.1.240
+#[windows]
+#windows01.rafaelmellonh.com.br ansible_host=192.168.1.240
 
 [debian]
 ubuntu02 ansible_host=192.168.1.221

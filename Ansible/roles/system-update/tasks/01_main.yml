@@ -1,0 +1,9 @@
+---
+
+- name: Udate RedHat Systems
+  import_tasks: update_redhat.yml
+  when: ansible_os_family == "RedHat"
+
+- name: Udate debian Systems
+  import_tasks: update_debian.yml
+  when: ansible_os_family == "Debian"
