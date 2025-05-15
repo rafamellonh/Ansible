@@ -5,3 +5,11 @@ packages:
   - net-tools
   - mcedit
   - unzip
+
+
+ssh_port: 22
+ssh_protocol: 2
+permit_root_login: no
+password_authentication: no
+challenge_response_authentication: no
+use_pam: yes

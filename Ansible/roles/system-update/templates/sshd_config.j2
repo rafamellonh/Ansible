@@ -1,0 +1,47 @@
+# Template: sshd_config.j2 - baseado no padrão do Ubuntu
+
+# Porta e protocolo
+Port {{ ssh_port  }}
+Protocol {{ ssh_protocol }}
+ListenAddress {{ ansible_default_ipv4.address }}
+
+# Host keys
+#HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_ecdsa_key
+#HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Logging
+SyslogFacility AUTH
+#LogLevel {{ ssh_log_level | default('INFO') }}
+
+# Autenticação
+#LoginGraceTime {{ login_grace_time | default('30s') }}
+PermitRootLogin {{ permit_root_login }}
+StrictModes yes
+#MaxAuthTries {{ max_auth_tries | default(6) }}
+#MaxSessions {{ max_sessions | default(10) }}
+
+# Senhas e chaves
+PubkeyAuthentication yes
+PasswordAuthentication {{ password_authentication }}
+PermitEmptyPasswords no
+ChallengeResponseAuthentication {{ challenge_response_authentication }}
+
+# PAM
+UsePAM {{ use_pam }}
+
+# Conexões
+X11Forwarding no
+PrintMotd no
+#ClientAliveInterval {{ client_alive_interval | default(300) }}
+#ClientAliveCountMax {{ client_alive_count_max | default(2) }}
+TCPKeepAlive yes
+
+# Forwarding e tunelamento
+AllowTcpForwarding yes
+AllowAgentForwarding yes
+PermitTunnel no
+
+# SFTP
+Subsystem sftp /usr/lib/openssh/sftp-server
+

@@ -38,4 +38,18 @@
   tags: extract
 
 
+- name: SSHD | Copy sshd_config tempate
+  template:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify:
+    - restart sshd
+  tags: sshd
+
+  
+
 
