@@ -19,3 +19,10 @@ roles/
     ├── meta/              # Dependências de outras roles e metadados
     └── tests/             # Testes simples para verificar a role (como playbooks de teste)
 ```
+
+### Testar a role
+```
+$ ansible-playbook -i system-update/tests/inventory system-update/tests/test.yml --syntax-check
+
+playbook: system-update/tests/test.yml
+```
