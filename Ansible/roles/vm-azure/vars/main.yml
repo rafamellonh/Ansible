@@ -1,0 +1,37 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for vm-azure
+vm name: "vm-ansible-01"
+resource_group: "Rafael"
+location: "eastus"
+vm_size: "Standard_b2s_v2"
+image:
+  publisher: "MicrosoftWindowsServer"
+  offer: "WindowsServer"
+  sku: "2022-Datacenter"
+  version: "latest"
+admin_username: "rafael"
+admin_password: "rafael@1234"
+
+
+vnet_name: "vnet-ansible"
+subnet_name: "subnet-ansible"
+vnet_address_prefix: "192.168.0.0/16"
+subnet_address_prefix: "192.168.1.0/24"
+
+nsg_name: "nsg-ansible"
+nsg_rule_name: "allow-rdp"
+nsg_rule_priority: 1000
+nsg_rule_protocol: "Tcp"
+nsg_rule_source_port_range: "*"
+nsg_rule_destination_port_range: 3389
+nsg_rule_source_address_prefix: "*"
+nsg_rule_destination_address_prefix: "*"
+nsg_rule_access: "Allow"
+nsg_rule_direction: "Inbound"
+nsg_rule_description: "Allow RDP access"
+
+nsg_rule_name-WinRM: "allow-5985"  
+nsg_rule_priority: 1001
+nsg_rule_destination_port_range: 5985
+nsg_rule_description: "Allow WinRM HTTP access"
