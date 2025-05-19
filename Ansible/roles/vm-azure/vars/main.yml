@@ -13,12 +13,13 @@ image:
 admin_username: "rafael"
 admin_password: "rafael@1234"
 
-
+#Vnet
 vnet_name: "vnet-ansible"
 subnet_name: "subnet-ansible"
 vnet_address_prefix: "192.168.0.0/16"
 subnet_address_prefix: "192.168.1.0/24"
 
+#NSG
 nsg_name: "nsg-ansible"
 nsg_rule_name: "allow-rdp"
 nsg_rule_priority: 1000

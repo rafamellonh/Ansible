@@ -1,3 +1,18 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for vm-azure
+- name: Create Virtual Network
+  azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group }}"
+    name: "{{ vnet_name }}"
+    address_prefixes: "{{ vnet_address_prefix }}"
+    state: present
+    location: "{{ location }}"
+    subnets:
+      - name: "{{ subnet_name }}"
+        address_prefix: "{{ subnet_address_prefix }}"
+  register: vnet
+  tags: 
+    - vnet
+
+- Name: Create Network Security Group
