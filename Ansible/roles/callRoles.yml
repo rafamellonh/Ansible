@@ -6,3 +6,5 @@
     - role: system-update
       tags: update
     #- role: /tmp/install-packages
+    - role: nginx
+      tags: nginx

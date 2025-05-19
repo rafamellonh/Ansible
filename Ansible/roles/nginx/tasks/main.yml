@@ -1,0 +1,46 @@
+---
+
+- name: update system
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install nginx
+  ansible.builtin.apt :
+    name: nginx
+    state: latest
+  tags: install_nginx
+
+- name: Create doc root directory
+  ansible.builtin.file:
+    path: "{{ nginx_doc_root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: copy index.html from files
+  ansible.builtin.copy:
+    src: index.html
+    dest: "{{nginx_doc_root}}/{{ nginx_index }}"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+
+- name: copy nginx config file
+  ansible.builtin.template:
+     src: nginx.config.j2
+     dest: /etc/nginx/nginx.conf
+  notify: Restarting nginx
+
+- name: copy site configuration
+  ansible.builtin.copy:
+    srv: site.conf.j2
+    dest: "/etc/nginx/sites-available/{{ nginx_server_name }}"
+
+- name: Enable site
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ nginx_server_name }}"
+    dest: "/etc/nginx/sites-enabled/{{ nginx_server_name }}"
+    state: link
+    force: yes
+  notify: Restarting nginx
