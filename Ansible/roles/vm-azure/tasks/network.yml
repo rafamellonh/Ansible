@@ -1,0 +1,56 @@
+---
+
+- name: Create Virtual Network
+  azure.azcollection.azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group }}"
+    name: "{{ vnet_name }}"
+    address_prefixes: "{{ vnet_address_prefix }}"
+    state: present
+    location: "{{ location }}"
+    tags:
+      environment: "ansible"
+  register: vnet
+
+- name: Create subnet
+  azure.azcollection.azure_rm_subnet:
+    resource_group: "{{ resource_group }}"
+    name: "{{ subnet_name }}"
+    address_prefix: "{{ subnet_address_prefix }}"
+    virtual_network: "{{ vnet_name }}"
+    state: present
+  register: subnet
+
+
+- name: Create Network Security Group
+  azure.azcollection.azure_rm_securitygroup:
+    resource_group: "{{ resource_group }}"
+    name: "{{ nsg_name }}"
+    location: "{{ location }}"
+    rules:
+      - name: "{{ nsg_rule_name }}"
+        protocol: "{{ nsg_rule_protocol }}"
+        source_port_range: "{{ nsg_rule_source_port_range }}"
+        destination_port_range: "{{ nsg_rule_destination_port_range }}"
+        source_address_prefix: "{{ nsg_rule_source_address_prefix }}"
+        destination_address_prefix: "{{ nsg_rule_destination_address_prefix }}"
+        access: "{{ nsg_rule_access }}"
+        priority: "{{ nsg_rule_priority }}"
+        direction: "{{ nsg_rule_direction }}"
+        description: "{{ nsg_rule_description }}"
+
+
+      - name: "{{ nsg_rule_name_WinRM}}"
+        protocol: "{{ nsg_rule_protocol }}"
+        source_port_range: "{{ nsg_rule_source_port_range }}"
+        destination_port_range: "{{ nsg_rule_destination_port_range_WinRM }}"
+        source_address_prefix: "{{ nsg_rule_source_address_prefix }}"
+        destination_address_prefix: "{{ nsg_rule_destination_address_prefix }}"
+        access: "{{ nsg_rule_access}}"
+        priority: "{{ nsg_rule_priority_WinRM }}"
+        direction: "{{ nsg_rule_direction }}"
+        description: "{{ nsg_rule_description_WinRM}}"       
+
+  register: security_group
+  tags:
+    - security_group
+      

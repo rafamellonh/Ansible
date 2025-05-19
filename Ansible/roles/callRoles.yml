@@ -8,3 +8,13 @@
     #- role: /tmp/install-packages
     - role: nginx
       tags: nginx
+
+- name: Deploy no azure
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+  gather_facts: no
+  roles:
+    - role: vm-azure
+      tags: azure

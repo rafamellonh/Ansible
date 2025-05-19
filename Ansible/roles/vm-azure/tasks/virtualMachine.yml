@@ -1,0 +1,35 @@
+- name: Create NIC
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ resource_group }}"
+    name: "{{ nic_name }}"
+    location: "{{ location }}"
+    subnet: "{{ subnet_name }}"
+    virtual_network: "{{ vnet_name }}"
+    #public_ip_allocation_method: "Dynamic"
+    security_group_name: "{{ nsg_name }}"
+    state: present
+
+- name: Create Virtual Machine
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    location: "{{ location }}"
+    name: "{{ vm_name }}"
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ admin_username }}"
+    admin_password: "{{ admin_password }}"
+    image:
+      publisher: "{{ image.publisher }}"
+      offer: "{{ image.offer }}"
+      sku: "{{ image.sku }}"
+      version: "{{ image.version }}"
+    os_type: "Windows"
+    managed_disk_type: "StandardSSD_LRS"
+    virtual_network_name: "{{ vnet_name }}"
+    subnet_name: "{{ subnet_name }}"
+    public_ip_allocation_method: "Dynamic"
+    state: present
+    network_interfaces: "{{ nic_name }}"  
+    api_profile: "latest"
+    tags:
+      environment: "ansible"
+

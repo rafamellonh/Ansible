@@ -1,14 +1,14 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # vars file for vm-azure
-vm name: "vm-ansible-01"
+vm_name: "vm-ansible-01"
 resource_group: "Rafael"
 location: "eastus"
-vm_size: "Standard_b2s_v2"
+vm_size: "B1s"
 image:
   publisher: "MicrosoftWindowsServer"
   offer: "WindowsServer"
-  sku: "2022-Datacenter"
+  sku: "2019-Datacenter"
   version: "latest"
 admin_username: "rafael"
 admin_password: "rafael@1234"
@@ -32,7 +32,10 @@ nsg_rule_access: "Allow"
 nsg_rule_direction: "Inbound"
 nsg_rule_description: "Allow RDP access"
 
-nsg_rule_name-WinRM: "allow-5985"  
-nsg_rule_priority: 1001
-nsg_rule_destination_port_range: 5985
-nsg_rule_description: "Allow WinRM HTTP access"
+nsg_rule_name_WinRM: "allow-5985"  
+nsg_rule_priority_WinRM: 1001
+nsg_rule_destination_port_range_WinRM: 5985
+nsg_rule_description_WinRM: "Allow WinRM HTTP access"
+
+#NIC
+nic_name: "nic-ansible-vm01"
