@@ -1,38 +1,57 @@
-Role Name
-=========
+# 📦 Role Ansible: nginx
 
-A brief description of the role goes here.
+Esta role instala e configura o **NGINX** em sistemas baseados no **Ubuntu/Debian**, com foco em automação de ambientes de estudo com **Ansible** e **VMware**.
 
-Requirements
-------------
+## ✅ Funcionalidades
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Instala o NGINX utilizando o gerenciador de pacotes `apt`
+- Cria diretórios personalizados para organização de configurações
+- Copia um `index.html` customizado para `/var/www/html`
+- Aplica configurações de site com arquivos disponíveis em `files/`
+- Não utiliza certificados SSL (configuração simples e direta)
 
-Role Variables
---------------
+## 📁 Estrutura
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```bash
+roles/
+└── nginx/
+    ├── tasks/
+    │   └── main.yml
+    ├── files/
+    │   ├── site.conf
+    │   └── index.html
+    └── templates/
+```
 
-Dependencies
-------------
+## 🚀 Como usar
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+No seu `playbook.yml`:
 
-Example Playbook
-----------------
+```yaml
+- hosts: web
+  become: yes
+  roles:
+    - nginx
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## 🛠️ Requisitos
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- Ubuntu Server 20.04 ou superior
+- Acesso sudo
+- Ansible 2.9+
 
-License
--------
+## 📚 Observações
 
-BSD
+- O arquivo `site.conf` será copiado para `/etc/nginx/sites-available/`
+- Certifique-se de que o link simbólico em `/etc/nginx/sites-enabled/` esteja presente (ou configure via role)
+- O conteúdo de `index.html` pode ser personalizado em `roles/nginx/files/index.html`
 
-Author Information
-------------------
+---
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## 👨‍💻 Rafael Mello
+
+Este projeto foi criado como parte de estudos com Ansible e ambientes virtualizados utilizando VMware.
+
+## 📝 Licença
+
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
