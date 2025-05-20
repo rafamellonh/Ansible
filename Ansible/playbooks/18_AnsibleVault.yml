@@ -1,0 +1,13 @@
+---
+
+- name: Ansible prompt | Creating user
+  hosts: debian
+  vars_files: /data/Ansible/playbooks/passwd.yml
+  tasks:
+    - name: User | Add user
+      ansible.builtin.user:
+        name: "mello01"
+        comment: "Rafael Mello"
+        shell: "/bin/nash"
+        home: "/home/mello01"
+        password:  "{{ password }}"
