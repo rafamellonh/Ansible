@@ -5,7 +5,6 @@
     location: "{{ location }}"
     subnet: "{{ subnet_name }}"
     virtual_network: "{{ vnet_name }}"
-    #public_ip_allocation_method: "Dynamic"
     security_group_name: "{{ nsg_name }}"
     state: present
 
@@ -24,13 +23,8 @@
       version: "{{ image.version }}"
     os_type: "Windows"
     managed_disk_type: "StandardSSD_LRS"
-    virtual_network_name: "{{ vnet_name }}"
-    subnet_name: "{{ subnet_name }}"
-    public_ip_allocation_method: "Dynamic"
+    network_interface_names:
+      - "{{ nic_name }}"
     state: present
-    network_interfaces: "{{ nic_name }}"  
-    api_profile: "2021-07-01"
-    #api_profile: "latest"
     tags:
       environment: "ansible"
-

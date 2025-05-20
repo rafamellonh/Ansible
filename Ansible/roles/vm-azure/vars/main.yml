@@ -4,7 +4,7 @@
 vm_name: "vm-ansible-01"
 resource_group: "Rafael"
 location: "eastus"
-vm_size: "Standard_B2ms"
+vm_size: Standard_B2ms
 image:
   publisher: "MicrosoftWindowsServer"
   offer: "WindowsServer"
