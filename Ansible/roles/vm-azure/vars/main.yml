@@ -4,7 +4,7 @@
 vm_name: "vm-ansible-01"
 resource_group: "Rafael"
 location: "eastus"
-vm_size: "B1s"
+vm_size: "Standard_B2ms"
 image:
   publisher: "MicrosoftWindowsServer"
   offer: "WindowsServer"
@@ -39,3 +39,4 @@ nsg_rule_description_WinRM: "Allow WinRM HTTP access"
 
 #NIC
 nic_name: "nic-ansible-vm01"
+

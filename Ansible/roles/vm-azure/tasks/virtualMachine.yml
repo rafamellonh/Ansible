@@ -29,7 +29,8 @@
     public_ip_allocation_method: "Dynamic"
     state: present
     network_interfaces: "{{ nic_name }}"  
-    api_profile: "2020-09-01-hybrid"
+    api_profile: "2021-07-01"
+    #api_profile: "latest"
     tags:
       environment: "ansible"
 
