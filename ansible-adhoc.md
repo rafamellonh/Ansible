@@ -16,5 +16,8 @@ ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --syntax-chec
 ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --list-hosts
 ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --list-tasks
 ansible-playbook -i inventory/hosts playbooks/1_UpdateLinux.yml -b --tag update
+ansible-vault encrypt passwd.yml
+ansible-vault view passwd.yml 
+ansible-playbook -i inventory/hosts playbooks/18_AnsibleVault.yml -b --ask-vault-password
 
 ```

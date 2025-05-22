@@ -10,4 +10,4 @@
         comment: "Rafael Mello"
         shell: "/bin/nash"
         home: "/home/mello01"
-        password:  "{{ password }}"
+        password: "{{ password }}"
