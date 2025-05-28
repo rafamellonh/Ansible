@@ -1,0 +1,9 @@
+---
+
+- name: Main Roles
+  hosts: all
+  roles:
+    - role: install-apps
+      tags: apps
+    - role: nginx
+      tags: nginx

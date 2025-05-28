@@ -1,0 +1,62 @@
+- name: Udate debian cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install nginx
+  ansible.builtin.package:
+    name: "{{ nginx_package_name }}"
+    state: present
+  tags: nginx
+
+- name: Habilitar e iniciar o serviço nginx
+  ansible.builtin.systemd:
+    name: "{{ nginx_service_name }}"
+    enabled: true
+    state: started
+  tags: nginx
+
+- name: Criar diretório raiz do site
+  ansible.builtin.file:
+    path: "{{ item.root}}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  loop: "{{ nginx_sites }}"
+
+- name: criar arquivos de configuracao dos nginx_sites
+  ansible.builtin.template:
+    src: nginx_site.conf.j2
+    dest: "{{ nginx_sites_available }}/{{ item.server_name }}.conf"
+    mode: '0644'
+  loop: "{{ nginx_sites }}"
+
+- name: Criar arquivo index.html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ item.root }}/index.html"
+    mode: '0644'
+  loop: "{{ nginx_sites }}"
+
+- name: Habilitar sites do nginx
+  ansible.builtin.file:
+    src: "{{ nginx_sites_available }}/{{ item.server_name }}.conf"
+    dest: "{{ nginx_sites_enabled }}/{{ item.server_name }}.conf"
+    state: link
+    force: yes
+  loop: "{{ nginx_sites }}"
+  notify: 
+    - reload nginx
+   
+- name: Remover default config se exister.
+  ansible.builtin.file:
+    path: "{{ nginx_sites_available }}/default"
+    state: absent
+  notify: 
+    - reload nginx
+
+- name: Ativar regras de firewall para nginx
+  ansible.builtin.ufw:
+    rule: allow
+    name: Nginx full
+  when: nginx_firewall_enabled 
