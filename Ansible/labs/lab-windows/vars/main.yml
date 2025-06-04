@@ -1,0 +1,59 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for lab-windows
+ansible_user: administrator
+ansible_password: "abc,123"
+ansible_connection: winrm
+ansible_port: 5985
+ansible_winrm_transport: ntlm
+ansible_winrm_scheme: http
+ansible_winrm_server_cert_validation: ignore
+
+
+#############
+
+iis_sites:
+  - name: "site01"
+    port: 8080
+    path: "C:\\inetpub\\wwwroot\\site01"
+    pool: "AppPool_site01"
+    bindings:
+      - hostname: rafaelmellonh01
+        port: 80
+      - hostname: rafaelmellonh01-alias
+        port: 8081
+
+    
+  - name: "site02"
+    port: 9090
+    path: "C:\\inetpub\\wwwroot\\site02"
+    pool: "AppPool_site02"
+    bindings:
+      - hostname: rafaelmellonh02
+        port: 80
+      - hostname: rafaelmellonh02-alias
+        port: 9091
+
+
+
+iis_features:
+  - Web-Server
+  - Web-WebServer
+  - Web-Common-Http
+  - Web-Default-Doc
+  - Web-Dir-Browsing
+  - Web-Http-Errors
+  - Web-Static-Content
+  - Web-Http-Redirect
+  - Web-Health
+  - Web-Http-Logging
+  - Web-Performance
+  - Web-Stat-Compression
+  - Web-Security
+  - Web-Filtering
+  - Web-Basic-Auth
+  - Web-App-Dev
+  - Web-Net-Ext
+  - Web-Net-Ext45
+  - Web-Asp-Net
+  - Web-Asp-Net45

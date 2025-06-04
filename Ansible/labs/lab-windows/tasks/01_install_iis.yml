@@ -1,0 +1,65 @@
+---
+- name : Install IIS
+  ansible.builtin.win_feature:
+    name: "{{ item }}"
+    state: present
+    include_sub_features: true
+    include_management_tools: true
+  loop: "{{ iis_features }}"
+
+- name: Start service
+  ansible.builtin.win_service:
+    name: w3svc
+    state: started
+    start_mode: auto
+
+- name: Create application pools 
+  community.windows.win_iis_webapppool:
+    name: "{{ item.pool}}"
+    state: started
+    auto_start: true
+  loop: "{{ iis_sites }}"
+  loop_control:
+    label: "{{ item.pool }}"
+
+- name: Create directory
+  ansible.builtin.win_file:
+    path: "{{ item.path }}"
+    state: directory
+  loop: "{{ iis_sites }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Copy file index.html
+  ansible.builtin.win_template:
+    src: index.html.j2
+    dest: "{{ item.path }}\\index.html" 
+  loop: "{{ iis_sites }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Create IIS sites
+  ansible.builtin.win_iis_website:
+    name: "{{ item.name }}"
+    state: started
+    physical_path: "{{ item.path }}"
+    port: "{{ item.port }}"
+    ip: "*"
+    application_pool: "{{ item.pool }}"
+  loop: "{{ iis_sites }}"
+  loop_control:
+    label: "{{ item.name }}"
+  
+- name: Add bindings to IIS sites  
+  community.windows.win_iis_webbinding:
+    name: "{{ item.0.name}}"
+    protocol: http
+    ip: "*"
+    port: "{{ item.1.port }}"
+    host_header: "{{ item.1.hostname }}"
+    state: present
+  loop: "{{ iis_sites | subelements('bindings') }}"
+  loop_control:
+    label: "{{ item.0.name }} - {{ item.1.hostname }}"
+  notify:
+    - Restart IIS

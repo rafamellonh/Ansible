@@ -4,8 +4,8 @@
   hosts: all
   roles:
     - role: install-apps
-      tags: apps
     - role: nginx
-      tags: nginx
     - role: IIS
-      tags: IIS
+    - role: lab-windows
+      
+    

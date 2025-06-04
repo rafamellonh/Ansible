@@ -1,0 +1,19 @@
+* Para chamar a execucao de uma role, temos que roldar o comando : 
+
+ansible-playbook -i inventory/hosts_win labs/callRoles.yml --tag install_iis
+
+* Ele vai chamar o ansible-playbook, utilisando o inventario hosts_win, para as roles que estao na pasta labs. Ele chamda o arquivo callRoles.yml onde tera todas as roles dentro da pasta labs:
+
+Ex : CallRoles.yml
+
+---
+
+- name: Main Roles
+  hosts: all
+  roles:
+    - role: install-apps
+    - role: nginx
+    - role: IIS
+    - role: lab-windows
+      
+CallRoles chama o main.yml de cada e executa a role conforme a tag configurada
