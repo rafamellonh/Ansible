@@ -1,0 +1,31 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for IIS
+- name: Install IIS
+  ansible.windows.win_feature:
+    name: web-server
+    state: absent
+    include_sub_features: true
+
+- name: Start service
+  win_service:
+    name: w3svc
+    state: started
+    start_mode: auto
+
+- name: create directory
+  win_file:
+    path: "{{ iis_site_path}}"
+    state: directory
+
+- name: Create index.html
+  win_copy:
+    content: "<html><body><h1>Olá, IIS!</h1></body></html>"
+    dest: " {{ iis_site_path }}/index.html"
+
+- name: Garantir que o site esta iniciado
+  win_iis_website:
+    name: "{{ iis_site_name }}"
+    state: started
+    physical_path: "{{ iis_site_path }}"
+    port: 80

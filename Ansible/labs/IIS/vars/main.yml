@@ -1,3 +1,7 @@
+iis_site_name: "TestSite"
+iis_site_path: "C:\\inetpub\\wwwroot\\TestSite"
+
+
 ansible_user: administrator
 ansible_password: "abc,123"
 ansible_connection: winrm

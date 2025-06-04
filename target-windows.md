@@ -5,6 +5,11 @@
 # OBS
 * Use NTLM e nao BASIC para computadores fora do dominio e no dominio use Kerberos
 
+Set-Item -Path WSMan:\localhost\Client\Auth\Basic -Value $true
+Set-Item -Path WSMan:\localhost\Client\Auth\NTLM -Value $true
+
+
+
 # Validando pré-requisitos (Executar comandos abaixo no PowerShell como Administrator):
 
     - NET Framework 4.0+: cd c:\Windows\Microsoft.NET\Framework64
