@@ -9,7 +9,7 @@
     validate_certs: no
     datacenter: "{{ datacenter_name }}"
     name: "{{ vm_name }}"
-    folder: "/{{ datacenter_name }}/VMS-LINUX"
+    folder: "/{{ datacenter_name }}/vm/VMS-LINUX"
     template: "{{ vm_template }}"
     state: poweredon
     guest_id: "{{ vm_guest_id }}"
@@ -23,5 +23,7 @@
     networks:
       - name: "{{ vm_network }}"
         type: "{{ vm_nic_type }}"
+        device_type: vmxnet3
         state: present
+
     wait_for_ip_address: yes
