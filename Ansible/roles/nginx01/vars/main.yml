@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for nginx
+
+nginx_port: 80
+nginx_ssl: false
+nginx_server_name: mysite.local
+nginx_doc_root: /var/www/mysite
+nginx_index: index.html

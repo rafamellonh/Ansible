@@ -73,6 +73,7 @@
     url: "{{ url_notepad}}"
     dest: "{{ directory_download }}\\notepad++.exe"
 
+#Install notepad++
 - name: install notepad++
   ansible.windows.win_package:
     path: "{{ directory_download }}\\notepad++.exe"

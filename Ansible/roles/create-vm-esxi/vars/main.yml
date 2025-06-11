@@ -1,0 +1,21 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for create-vm-esxi
+
+# Variables for vSphere connection
+vcenter_hostname: 192.168.1.179
+vcenter_username:  administrator@vsphere.local
+vcenter_password:  "@#Rafa,321@#"
+datacenter_name:  DC-Mello
+datastore_name:  DS-LUN03
+#vars for VM creation
+vm_name:  ansible-vm
+vm_template:  VML-00
+vm_network:  "DPG-PROD-VLAN10"
+vm_guest_id:  "ubuntu64Guest"
+vm_cpu:  2
+vm_memory:  2048
+vm_disk_size:  20
+vm_num_nics:  1
+vm_nic_type:  vmxnet3
+

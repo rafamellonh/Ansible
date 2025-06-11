@@ -2,11 +2,12 @@
 
 - name: Main Roles
   hosts: all
-  gather_facts: yes
+  #gather_facts: yes
   roles:
     - role: install-apps
     - role: nginx
     - role: IIS
     - role: lab-windows
+    - role: create-vm-esxi
       
     

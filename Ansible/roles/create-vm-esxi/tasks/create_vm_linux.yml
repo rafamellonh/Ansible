@@ -1,0 +1,27 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for create-vm-esxi
+- name: Create a VM 
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ datacenter_name }}"
+    name: "{{ vm_name }}"
+    folder: "/{{ datacenter_name }}/VMS-LINUX"
+    template: "{{ vm_template }}"
+    state: poweredon
+    guest_id: "{{ vm_guest_id }}"
+    disk:
+      - size_gb: "{{ vm_disk_size }}"
+        type: thin
+        datastore: "{{ datastore_name }}"
+    hardware:
+      memory_mb: "{{ vm_memory }}"
+      num_cpus: "{{ vm_cpu }}"
+    networks:
+      - name: "{{ vm_network }}"
+        type: "{{ vm_nic_type }}"
+        state: present
+    wait_for_ip_address: yes

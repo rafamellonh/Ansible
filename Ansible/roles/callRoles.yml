@@ -9,4 +9,8 @@
     - role: nginx
       tags: nginx
     - role: lab-windows
-      tags: install_iis
+    - role: IIS
+    - role: lab-windows
+    - role: create-vm-esxi
+
+

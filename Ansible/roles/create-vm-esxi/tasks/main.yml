@@ -1,0 +1,3 @@
+- name: Create a VM Linux
+  import_tasks: create_vm_linux.yml
+  tags: create_vm_linux
