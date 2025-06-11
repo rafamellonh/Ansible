@@ -6,3 +6,12 @@
     name: w3svc
     state: restarted
   
+- name: Restart windows
+  ansible.windows.win_reboot:
+    msg: "Rebooting the system to apply changes"
+    pre_reboot_delay: 10
+    post_reboot_delay: 30
+    reboot_timeout: 600
+  when: ansible_facts['os_family'] == 'Windows'
+  register: reboot_result
+

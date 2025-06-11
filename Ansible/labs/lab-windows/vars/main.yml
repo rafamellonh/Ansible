@@ -57,3 +57,14 @@ iis_features:
   - Web-Net-Ext45
   - Web-Asp-Net
   - Web-Asp-Net45
+
+#config windows
+computer_name: "LAB-Ansible-WIN01"
+timezone: "Eastern Standard Time"
+package_install:
+  - Web-Server
+  - NET-Framework-45-Core
+  - telnet-client
+user_support: suporte01
+directory_download: "C:\\download"
+url_notepad: "https://objects.githubusercontent.com/github-production-release-asset-2e65be/33014811/238ad097-c22e-45fb-a0b0-2d117400a691?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250611%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250611T190400Z&X-Amz-Expires=300&X-Amz-Signature=b7dd99964400516a8122bc450d4bf26914baae45f5910aa37662149c28dc3cf8&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dnpp.8.7.7.Installer.x64.exe&response-content-type=application%2Foctet-stream"

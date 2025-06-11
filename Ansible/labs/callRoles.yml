@@ -2,6 +2,7 @@
 
 - name: Main Roles
   hosts: all
+  gather_facts: yes
   roles:
     - role: install-apps
     - role: nginx

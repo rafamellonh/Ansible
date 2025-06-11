@@ -1,3 +1,7 @@
+- name: Configure Windows
+  import_tasks: 02_config_win.yml
+  tags: config_win
+
 - name: Install IIS
   import_tasks: 01_install_iis.yml
   tags: install_iis

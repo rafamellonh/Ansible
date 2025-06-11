@@ -1,0 +1,79 @@
+---
+- name: Rename windows
+  ansible.windows.win_hostname:
+    name: "{{ computer_name }}"
+  register: hostname_result
+  notify: Restart windows
+
+- name: Set TimeZone
+  ansible.windows.win_timezone:
+    timezone: "{{ timezone }}"
+  register: timezone_result
+
+- name: Install iis_features
+  ansible.windows.win_feature:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ package_install }}"
+  register: feature_install_result
+  
+#Get IP address  
+- name: Get IP Address
+  block:
+    - name: Get IP address
+      ansible.windows.win_shell: |
+        (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias "Ethernet0" | Where-Object { $_.IPAddress -notlike "169.*" }).IPAddress
+      register: ipAddress_result
+
+    - name: Save IP
+      set_fact:
+        ip_address: "{{ ipAddress_result.stdout | trim }}"
+
+    - name: SHow IP address
+      ansible.builtin.debug:
+        msg: "IP Address: {{ ip_address }}"    
+
+
+# Create group support and add to group administrator and create user in the group
+- name: Create group support
+  block:
+    -  name: Create group support 
+       ansible.windows.win_group:
+         name: "Support"
+         description: "Group for support team"
+         state: present
+       register: group_support_result
+    
+    - name: Add group support to Administrators
+      ansible.windows.win_group_membership:
+        name: "Administrators"
+        members: "Support"
+        state: present 
+      register: group_admin_result  
+   
+    - name: Create user support
+      ansible.windows.win_user:
+        name: "{{ user_support }}"
+        password: "{{ 'Ansible@123' | password_hash('sha512') }}"
+        state: present
+        description: "Support User"
+        groups: "support" 
+      register: user_support_result
+
+#Create directory download
+- name: Create directory download
+  ansible.windows.win_file:
+    path: "{{ directory_download }}"
+    state: directory
+    register: download_dir_result
+
+#Download file
+- name: download file installer
+  ansible.windows.win_get_url:
+    url: "{{ url_notepad}}"
+    dest: "{{ directory_download }}\\notepad++.exe"
+
+- name: install notepad++
+  ansible.windows.win_package:
+    path: "{{ directory_download }}\\notepad++.exe"
+    arguments: "/S"
