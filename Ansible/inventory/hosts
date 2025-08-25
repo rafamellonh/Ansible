@@ -1,2 +1,2 @@
 [debian]
-ubuntu01 ansible_host=192.168.40.53
+ubuntu01 ansible_host=192.168.40.208

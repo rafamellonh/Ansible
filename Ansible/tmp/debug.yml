@@ -1,7 +1,13 @@
 ---
-- name: debug module demo
-  hosts : debian
-  tasks: 
-    - name: debug msg
+- name: Pause module demo
+  hosts: debian
+  vars:
+    pause_time: 5
+  tasks:
+    - name: Pause for a specified time
+      ansible.builtin.pause:
+        seconds: "{{ pause_time }}"
+      
+    - name: Print a message after the pause
       ansible.builtin.debug:
-        msg: "This is a debug message"
+        msg: "Paused for {{ pause_time }} seconds" 
