@@ -1,7 +1,12 @@
----
-- name: debug module demo
+--- 
+- name: Facts
   hosts : debian
-  tasks: 
-    - name: debug msg
+  gather_facts: yes
+  tasks:
+    - name : print ansible_facts
       ansible.builtin.debug:
-        msg: "This is a debug message"
+        var: inventory_hostname
+   
+    - name: print ansible_facts_inventory_hostname
+      ansible.builtin.debug:
+        var: ansible_hostname
