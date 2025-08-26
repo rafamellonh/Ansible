@@ -1,0 +1,9 @@
+---
+- name: copy files
+  hosts: debian
+
+  tasks:
+    - name: copy files  
+      ansible.builtin.fetch:
+        src: /home/rafael/InstallAzureMonitorAgentLinux.1 # Remote Server
+        dest: /tmp/InstallAzureMonitorAgentLinux.1 # Local Machine

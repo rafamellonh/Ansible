@@ -1,0 +1,14 @@
+--- 
+- name: Ping and Reboot Demo
+  hosts: debian
+  become: yes
+  
+  tasks:
+    - name: Ping
+      ansible.builtin.ping:
+
+    - name: Reboot the machine
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+        msg: "Rebooting machine in 5 seconds"
+        test_command: whoami
