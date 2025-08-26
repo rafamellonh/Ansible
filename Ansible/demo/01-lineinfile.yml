@@ -7,7 +7,7 @@
     - name : lineinfile demo
       ansible.builtin.lineinfile:
         state: present
-        regexp: '^#?\s*PasswordAuthentication\s+.*$' # usa regex para idempotência (altera se existir, insere se não existir)
+        regexp: '^#?\s*PasswordAuthentication\s+.*$' # usa regex para idempotência (altera se existir, insere se não existir
         dest: /etc/ssh/sshd_config
         line: PasswordAuthentication yes
         validate: "sshd -t -f %s"
@@ -20,4 +20,3 @@
         name: ssh
         state: restarted
 
-# --- IGNORE ---
