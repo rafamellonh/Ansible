@@ -1,0 +1,22 @@
+---
+- name: Add line to file
+  hosts: debian
+  become: yes
+
+  tasks: 
+    - name : lineinfile demo
+      ansible.builtin.lineinfile:
+        state: present
+        regexp: '^#?\s*PasswordAuthentication\s+.*$' # usa regex para idempotência (altera se existir, insere se não existir)
+        dest: /etc/ssh/sshd_config
+        line: PasswordAuthentication yes
+        validate: "sshd -t -f %s"
+        backup: yes
+      notify: Restart ssh
+
+  handlers:
+    - name: Restart ssh
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
