@@ -1,0 +1,14 @@
+---
+- name: blockinfile demo
+  hosts : debian
+  become: yes
+
+  tasks:
+    - name: blockinfile demo /etc/hosts
+      ansible.builtin.blockinfile:
+        state: present
+        dest: /etc/hosts  
+        content: |
+          192.168.60.100 demo.ansible.com demo
+          192.168.60.101 demo1.ansible.com demo1
+          192.168.60.102 demo1.ansible.com demo2
