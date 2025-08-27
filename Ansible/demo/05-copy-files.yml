@@ -1,0 +1,11 @@
+---
+- name: Copy Files
+  hosts: debian
+  become: yes
+
+  tasks:
+    - name: Copy Files
+      ansible.builtin.copy:
+        src: /data/notes.md
+        dest: /tmp/notes.md
+        mode: '0644'
