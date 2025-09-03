@@ -1,0 +1,14 @@
+---
+- name: Services on Remote Hosts
+  hosts: debian
+  become: yes
+  vars: 
+    service_name: apache2
+
+  tasks:
+    - name: restart service
+      ansible.builtin.service:
+        name: "{{ service_name }}"
+        state: restarted #start, stop, restart, reload, reload-or-restart, none
+        enabled: yes
+        
