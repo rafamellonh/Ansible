@@ -1,0 +1,33 @@
+---
+- name: Template Module
+  hosts: debian
+  become: yes
+  vars: 
+    page_title: "Welcome to My Website"
+    page_description: "This is a sample web page generated using Ansible's template module."
+  
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    
+    - name: Create a custom web page using template
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+
+# Create a file templates/index.html.j2 with the following content:
+# <!DOCTYPE html>
+# <html>  
+# <head>
+#     <title>{{ page_title }}</title>
+#     <meta charset="UTF-8">
+#     <meta name="description" content="{{ page_description }}">  
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+# </head>
+# <body>  

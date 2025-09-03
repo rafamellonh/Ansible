@@ -1,0 +1,20 @@
+--- 
+- name: Service start/stop/boot demo
+  hosts: debian
+  become: yes
+  vars: 
+    service_name: apache2
+  tasks: 
+    - name: populate service facts
+      ansible.builtin.service_facts:
+      #Essa task coleta informações sobre os serviços em execução no host (semelhante a systemctl list-unit-files + systemctl status).
+      #O resultado é armazenado no dicionário services. 
+       
+    - name: start service
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      when: "item in services"
+      with_items: 
+        - "{{ service_name }}"
