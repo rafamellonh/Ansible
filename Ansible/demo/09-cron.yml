@@ -1,0 +1,16 @@
+---
+- name: Crontab Example
+  hosts: debian
+  become: yes
+  tasks:
+    - name: "example cron job"
+      ansible.builtin.cron:
+        name: "test"
+        state: present
+        minute: "*/2"
+        hour: "*"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "/usr/bin/echo 'Hello World' >> /tmp/cron.log"
+        
