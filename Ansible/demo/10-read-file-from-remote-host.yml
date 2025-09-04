@@ -1,0 +1,16 @@
+---
+- name: Read a file from a remote host
+  hosts: debian
+  become: yes
+  vars:
+    remote_file: "/etc/hosts"
+
+  tasks:
+    - name: Read the remote file
+      ansible.builtin.slurp:
+        src: "{{ remote_file }}"
+      register: slurped_file
+  
+    - name: display the content
+      ansible.builtin.debug:
+        msg: "{{ slurped_file.content | b64decode }}"

@@ -1,0 +1,17 @@
+--- 
+- name : set env variable
+  hosts: debian
+  become: yes
+  vars:
+    os_environment:
+      - key: "My_ENV"
+        value: "This is my env variable"
+
+  tasks:
+    - name: Set env
+      ansible.builtin.lineinfile:
+        dest: /etc/environment
+        state: present
+        regexp: '^{{ item.key }}='
+        line: '{{ item.key }}="{{ item.value }}"'
+      with_items: "{{ os_environment }}"
