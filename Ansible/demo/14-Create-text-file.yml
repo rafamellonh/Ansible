@@ -1,0 +1,13 @@
+--- 
+- name: Create a file text
+  hosts: debian
+  vars:
+    file_path: /tmp/ansible_file.txt
+    file_content: "This is a sample text created by Ansible.\nYou can add multiple lines as needed."
+
+  tasks:
+    - name: Create a text file with specified content
+      ansible.builtin.copy:
+        dest: "{{ file_path }}"
+        content: "{{ file_content }}"
+      register: file_creation

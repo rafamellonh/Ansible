@@ -1,0 +1,10 @@
+--- 
+- name: Create an empty file
+  hosts: debian
+  vars:
+    file: /tmp/empty_file.txt
+  tasks:
+    - name: Create an empty file using the file module
+      ansible.builtin.file:
+        path: "{{ file }}"
+        state: touch  

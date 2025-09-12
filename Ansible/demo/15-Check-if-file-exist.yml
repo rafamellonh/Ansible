@@ -1,0 +1,20 @@
+---
+- name: Check if a file exists
+  hosts: debian
+  vars:
+    file_to_check: /tmp/ansible_file.txt
+  tasks:
+    - name: Check if /tmp/ansible_file.txt exists
+      ansible.builtin.stat:
+        path: "{{ file_to_check }}"
+      register: file_status
+
+    - name: Display file existence status
+      ansible.builtin.debug:
+        msg: "The file {{ file_to_check }} exists."
+      when: file_status.stat.exists
+
+    - name: Display file not existence status
+      ansible.builtin.debug:
+        msg: "The file {{ file_to_check }} not exists."
+      when: not file_status.stat.exists

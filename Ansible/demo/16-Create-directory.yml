@@ -1,0 +1,13 @@
+--- 
+- name: Create an directory
+  hosts: debian
+  become: yes
+  tasks:
+    - name: Create a directory
+      ansible.builtin.file:
+        path: /tmp/ansible_directory
+        state: directory
+        mode: '0755'
+        owner: ansible
+        group: ansible
+      tags: create_directory
