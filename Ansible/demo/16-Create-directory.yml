@@ -5,9 +5,9 @@
   tasks:
     - name: Create a directory
       ansible.builtin.file:
-        path: /tmp/ansible_directory
+        path: "/tmp/ansible_directory"
         state: directory
         mode: '0755'
-        owner: ansible
-        group: ansible
+        owner: rafael
+        group: rafael
       tags: create_directory
