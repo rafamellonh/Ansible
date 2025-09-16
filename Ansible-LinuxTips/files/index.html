@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Informações do Servidor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .box {
+            background: #fff;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        h1 { color: #333; }
+        p { font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Informações do Servidor</h1>
+        <p><strong>IP do Cliente:</strong> <!--# echo var="remote_addr" --></p>
+        <p><strong>Nome do Servidor:</strong> <!--# echo var="hostname" --></p>
+    </div>
+</body>
+</html>
