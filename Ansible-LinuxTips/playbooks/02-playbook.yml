@@ -1,0 +1,22 @@
+--- 
+- name: Install Nginx
+  hosts: web
+  become: yes
+  tasks:
+    
+    - name: Update apt update_cache
+      ansible.builtin.apt:
+        update_cache: yes
+        
+    - name: Install nginx 
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+      
+    - name: Start and enable nginx server
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    
