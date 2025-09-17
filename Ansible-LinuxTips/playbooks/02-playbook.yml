@@ -13,6 +13,12 @@
         name: nginx
         state: latest
 
+    - name: Start and enable nginx server
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
     - name: Copy custon index.html
       ansible.builtin.copy:
         src: ../files/index.html
@@ -21,13 +27,10 @@
         group: www-data
         mode: '0644'
         backup: yes
-
-    - name: Start and enable nginx server
+      notify: Restarting-Nginx
+    
+  handlers:
+    - name: Restarting-Nginx
       ansible.builtin.service:
         name: nginx
-        state: started
-        enabled: yes
-
-
-
-    
+        state: restarted   
