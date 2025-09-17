@@ -2,30 +2,55 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Informações do Servidor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servidor Nginx - Página de Teste</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
             text-align: center;
-            padding-top: 50px;
+            padding: 50px;
         }
-        .box {
-            background: #fff;
-            padding: 20px;
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 1rem;
+            padding: 10px 20px;
+            background: #00c853;
+            border-radius: 6px;
             display: inline-block;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+            font-weight: bold;
         }
-        h1 { color: #333; }
-        p { font-size: 18px; }
+        footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>Informações do Servidor</h1>
-        <p><strong>IP do Cliente:</strong> <!--# echo var="remote_addr" --></p>
-        <p><strong>Nome do Servidor:</strong> <!--# echo var="hostname" --></p>
+    <div class="container">
+        <h1>🚀 Nginx está funcionando!</h1>
+        <p>Parabéns! Seu servidor Nginx foi configurado com sucesso.</p>
+        <div class="status">Status: Online ✅</div>
+        <footer>
+            <p>© 2025 - Servidor de Teste</p>
+        </footer>
     </div>
 </body>
 </html>
