@@ -12,18 +12,13 @@
       ansible.builtin.apt:
         name: nginx
         state: latest
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> 29523b1b310c383ff8a551960c62ec2950c3ece4
     - name: Start and enable nginx server
       ansible.builtin.service:
         name: nginx
         state: started
         enabled: yes
 
-<<<<<<< HEAD
     - name: Copy custon index.html
       ansible.builtin.copy:
         src: ../files/index.html
@@ -39,6 +34,3 @@
       ansible.builtin.service:
         name: nginx
         state: restarted   
-=======
-    
->>>>>>> 29523b1b310c383ff8a551960c62ec2950c3ece4
