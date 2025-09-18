@@ -1,10 +1,10 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # vars file for create-instances
-- resource_group : "rg-k8s-cluster"
-- location : "eastus"
-- nsg_name : "nsg-k8s-cluster"
-- vnet_name : "vnet-k8s-cluster"
-- vnet_address_prefix : "192.168.0.0/16"
-- subnet_name : "subnet-k8s-cluster"
-- subnet_address_prefix : "1921.168.1.0/24"
+resource_group : "rg-k8s-cluster"
+location : "eastus"
+nsg_name : "nsg-k8s-cluster"
+vnet_name : "vnet-k8s-cluster"
+vnet_address_prefix : "192.168.0.0/16"
+subnet_name : "subnet-k8s-cluster"
+subnet_address_prefix : "192.168.1.0/24"

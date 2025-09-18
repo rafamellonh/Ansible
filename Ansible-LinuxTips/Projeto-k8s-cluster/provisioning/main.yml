@@ -1,5 +1,10 @@
-- hosts: local
+---
+- name: Provisionar cluster no Azure
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+
   roles:
     - create-instances
-
-    #roles:
