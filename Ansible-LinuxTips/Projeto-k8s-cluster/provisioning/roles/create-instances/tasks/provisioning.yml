@@ -1,3 +1,17 @@
+- name: Create Virtual Network
+  local_action:
+    module: azure_rm_virtualnetwork
+    resource_group: "{{ resource_group }}"
+    name: "{{ vnet_name }}"
+    address_prefixes: "{{ vnet_address_prefix }}"
+    location: "{{ location }}"
+    dns_servers: []
+    subnets:
+      - name: "{{ subnet_name }}"
+        address_prefix: "{{ subnet_address_prefix }}"
+        network_security_group: "{{ nsg_name }}"
+  register: vnet
+
 - name: Create NSG
   local_action: 
     module: azure_rm_networksecuritygroup
@@ -19,18 +33,3 @@
         priority: 1002
         direction: Inbound
   register: nsg
-
-
-- name: Create Virtual Network
-  local_action:
-    module: azure_rm_virtualnetwork
-    resource_group: "{{ resource_group }}"
-    name: "{{ vnet_name }}"
-    address_prefixes: "{{ vnet_address_prefix }}"
-    location: "{{ location }}"
-    dns_servers: []
-    subnets:
-      - name: "{{ subnet_name }}"
-        address_prefix: "{{ subnet_address_prefix }}"
-        network_security_group: "{{ nsg_name }}"
-  register: vnet

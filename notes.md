@@ -11,3 +11,22 @@ sudo mount -t cifs //192.168.40.52/ansible /data/ -o username=rafael,password=#x
 
 ```
 source ~/ansible-azure-env/bin/activate
+
+
+```
+# Coleção do Azure para Ansible
+ansible-galaxy collection install azure.azcollection
+
+# Autenticação (uma das opções abaixo)
+
+# Opção A: Azure CLI interativo (mais simples em dev)
+az login
+# (opcional) escolha a subscription certa
+az account set --subscription "<SUBSCRIPTION_ID>"
+
+# Opção B: Service Principal (CI/CD)
+export AZURE_CLIENT_ID="<appId>"
+export AZURE_CLIENT_SECRET="<password>"
+export AZURE_TENANT="<tenantId>"
+export AZURE_SUBSCRIPTION_ID="<subscriptionId>"
+```
