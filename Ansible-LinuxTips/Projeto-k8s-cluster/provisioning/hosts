@@ -1,5 +1,6 @@
 [local]
-localhost ansible_connection=local ansible_python_interpreter=/home/rafael/.venvs/ansible-azure/bin/python
+localhost ansible_connection=local ansible_python_interpreter=/home/rafael/venv-ansible/bin/python
+                                                              
                                    
 [kubernetes]
 
