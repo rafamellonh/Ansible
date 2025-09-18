@@ -8,25 +8,10 @@
   register: rg
   tags: k8s_cluster
 
-
-- name: Create Virtual Network
-  local_action:
-    module: azure_rm_virtualnetwork
-    resource_group: "{{ resource_group }}"
-    name: "{{ vnet_name }}"
-    address_prefixes: "{{ vnet_address_prefix }}"
-    location: "{{ location }}"
-    dns_servers: []
-    subnets:
-      - name: "{{ subnet_name }}"
-        address_prefix: "{{ subnet_address_prefix }}"
-        network_security_group: "{{ nsg_name }}"
-  register: vnet
-
 - name: Create NSG
-  local_action: 
-    module: azure_rm_networksecuritygroup
-    resource_group: "{{  }}"
+  delegate_to: localhost
+  azure.azcollection.azure_rm_securitygroup:
+    resource_group: "{{ resource_group }}"
     name: "{{ nsg_name }}"
     location: "{{ location }}"
     rules:
@@ -44,3 +29,24 @@
         priority: 1002
         direction: Inbound
   register: nsg
+
+- name: Create Virtual Network
+  delegate_to: localhost
+  azure.azcollection.azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group }}"
+    name: "{{ vnet_name }}"
+    address_prefixes: "{{ vnet_address_prefix }}"
+    location: "{{ location }}"
+    dns_servers: []
+  register: vnet
+
+- name: Create a subnet
+  delegate_to: localhost
+  azure.azcollection.azure_rm_subnet:
+    resource_group: "{{ resource_group }}"
+    name: "{{ subnet_name }}"
+    address_prefix: "{{ subnet_address_prefix }}"
+    virtual_network: "{{ vnet_name }}"
+    security_group_name : "{{ nsg_name }}"
+  register: subnet
+
