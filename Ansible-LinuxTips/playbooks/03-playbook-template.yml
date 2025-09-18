@@ -1,0 +1,36 @@
+--- 
+- name: Install Nginx
+  hosts: web
+  become: yes
+  tasks:
+    
+    - name: Update apt update_cache
+      ansible.builtin.apt:
+        update_cache: yes
+        
+    - name: Install nginx 
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+
+    - name: Start and enable nginx server
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Template custon index.html
+      ansible.builtin.template:
+        src: ../files/index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+        backup: yes
+      notify: Restarting-Nginx
+    
+  handlers:
+    - name: Restarting-Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted   
