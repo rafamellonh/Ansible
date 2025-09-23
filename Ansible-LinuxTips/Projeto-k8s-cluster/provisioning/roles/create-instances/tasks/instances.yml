@@ -1,0 +1,28 @@
+---
+- name: Create Network Interface for instane 01
+  delegate_to: localhost
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ resource_group }}"
+    name: "{{ nic-instance-01 }}"
+    virtual_network: "{{ vnet_name }}"
+    subnet: "{{ subnet_name }}"
+    security_group: "{{ nsg_name }}"
+    location: "{{ location }}"
+
+
+- name: Create Instance 01
+  delegate_to: localhost
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ instance-01 }}"
+    vm_size: "{{ isize_instances }}"
+    admin_username: "{{ admin_user }}"
+    admin_password: "{{ admin_password }}"
+    network_interfaces: "{{ nic-instance-01 }}" 
+    image:
+      offer: "{{ os_image_offer }}"
+      publisher: "{{ os_image_publisher }}"
+      sku: "{{ os_image_sku }}"
+      version: latest
+    state: present
+    location: "{{ location }}"  

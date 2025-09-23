@@ -125,3 +125,9 @@ Arquivo `provisioning/main.yml`:
 ## 7. Executar o Playbook
 
 ansible-playbook -i hosts provisioning/main.yml -vv
+
+
+
+## 8. Problemas com o AZ LOGIN
+
+* Disable IPV6
