@@ -1,5 +1,9 @@
 #SPDX-License-Identifier: MIT-0
 ---
+
+#Playbook location
+playbook_dir:  "/data/Ansible-LinuxTips/Projeto-k8s-cluster/provisioning"
+
 # vars file for create-instances
 resource_group : "rg-k8s-cluster"
 location : "eastus"
@@ -31,3 +35,6 @@ managed_disk_type : "StandardSSD_LRS"
 #USer
 admin_user : "rafaeladmin"
 admin_password : "YourP@ssw0rd1234" 
+
+#PIP
+public_ip_instance_01 : "pip_instance_01"
