@@ -3,3 +3,5 @@
 
 - name: Import instances tasks
   import_tasks: instances.yml
+  tags:
+    - instances

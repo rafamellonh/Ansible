@@ -10,21 +10,22 @@ subnet_name : "subnet-k8s-cluster"
 subnet_address_prefix : "192.168.1.0/24"
 
 #vms
-vm_01 : "instance-01"
-vm_02 : "instance-02"
-vm_03 : "instance-03"
+vm_01 : "instance01"
+vm_02 : "instance02"
+vm_03 : "instance03"
 
 
 #Nics
-nic_instance_01 : "nic-instance-01"
-nic_instance_02 : "nic-instance-02"
-nic_instance_03 : "nic-instance-03"
+nic_instance_01 : "nic_instance_01"
+nic_instance_02 : "nic_instance_02"
+nic_instance_03 : "nic_instance_03"
 
 #Size
 size_instances : "Standard_B2s"
-os_image_offer : "UbuntuServer"
+os_image_offer : "ubuntu-24_04-lts"
 os_image_publisher : "Canonical"
-os_image_sku : "24.04-LTS"
+os_image_sku : "server"
+managed_disk_type : "StandardSSD_LRS"
 
 
 #USer
