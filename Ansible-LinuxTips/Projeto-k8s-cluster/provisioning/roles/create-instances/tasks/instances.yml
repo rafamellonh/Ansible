@@ -13,11 +13,10 @@
   delegate_to: localhost
   azure.azcollection.azure_rm_publicipaddress_info:
     resource_group: "{{ resource_group }}"
-    name: "public_ip_instance_{{ item }}"
+    name: "pip_instance_{{ item }}"
+    #name: "public_ip_instance_{{ item }}"
   register: pip_results
   loop: "{{ vm_ids }}"
-  retries: 10
-  delay: 6
 
 - name: Create Network Interface for instane 01
   delegate_to: localhost
@@ -80,7 +79,7 @@
   lineinfile:
     path: "{{ playbook_dir }}/hosts"
     insertafter: "[kubernetes]" 
-    regexp: '^{{ vm_01 }}\s'
+    regexp: '^instance_{{ item.item }}\s'
     line: "instance_{{ item.item }} ansible_host={{ item.publicipaddresses[0].ip_address }} ansible_user={{ admin_user }}"
   loop: "{{ pip_results.results }}"
   loop_control:
