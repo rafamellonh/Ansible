@@ -4,53 +4,52 @@
   azure.azcollection.azure_rm_publicipaddress:
     resource_group: "{{ resource_group }}"
     allocation_method: Static
-    name: "{{ public_ip_instance_01 }}"
+    name: "pip_{{ item }}"
     location: "{{ location }}"
+  loop: "{{ vm_ids }}"
   
-
 # Ler o recurso de Public IP para obter o endereço
 - name: Get Public IP info
   delegate_to: localhost
   azure.azcollection.azure_rm_publicipaddress_info:
     resource_group: "{{ resource_group }}"
-    name: "{{ public_ip_instance_01 }}"
-  register: pip01_info
-
-#Guardar o ip publico
-- name: Save public ip to a file
-  set_fact:
-    vm_public_ip : "{{ pip01_info.publicipaddresses[0].ip_address }}"
-
-#Mostrar o ip publico
-- name: Show public ip
-  debug:
-    msg: "The public IP address is {{ vm_public_ip }}"
-    #var: pip01_info
+    name: "public_ip_instance_{{ item }}"
+  register: pip_results
+  loop: "{{ vm_ids }}"
 
 - name: Create Network Interface for instane 01
   delegate_to: localhost
   azure.azcollection.azure_rm_networkinterface:
     resource_group: "{{ resource_group }}"
-    name: "{{ nic_instance_01 }}"
+    name: "nic_instance{{ item }}"
     virtual_network: "{{ vnet_name }}"
     subnet: "{{ subnet_name }}"
     security_group: "{{ nsg_name }}"
     location: "{{ location }}"
     ip_configurations:
-      - name: pip01
-        public_ip_address_name: "{{ public_ip_instance_01 }}"
+      - name: "ipconfig_{{ item }}"
+        public_ip_address_name: "public_ip_instance_{{ item }}"
         private_ip_allocation_method: Dynamic
+  loop: "{{ vm_ids }}"
 
+# Ler o recurso de Network Interface para obter o endereço privado
+- name: Get NIC info
+  delegate_to: localhost
+  azure.azcollection.azure_rm_networkinterface_info:
+    resource_group: "{{ resource_group }}"
+    name: "nic_instance_{{ item }}"
+  register: nic_results
+  loop: "{{ vm_ids }}"
 
 - name: Create Instance 01
   delegate_to: localhost
   azure.azcollection.azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
-    name: "{{ vm_01 }}"
+    name: "instance_{{ item }}"
     vm_size: "{{ size_instances }}"
     admin_username: "{{ admin_user }}"
     admin_password: "{{ admin_password }}"
-    network_interfaces: "{{ nic_instance_01 }}" 
+    network_interfaces: "nic_instance{{ item }}" 
     image:
       offer: "{{ os_image_offer }}"
       publisher: "{{ os_image_publisher }}"
@@ -61,17 +60,19 @@
     os_disk_size_gb: 64
     state: present
     location: "{{ location }}"  
-  register: azure
-
+  register: vm_result
+  loop: "{{ vm_ids }}"
+    
 
 - name: add instance to inventory
   add_host:
-    name: "{{ vm_01 }}"
-    ansible_host: "{{ vm_public_ip }}"
+    name: "instance_{{ item }}"
+    ansible_host: "{{ item.publicipaddresses[0].ip_address }}"
+    ansible_user: "{{ admin_user }}"
     groups: kubernetes
-  #loop: "{{ azure.instances }}"
-
-- name: Adicionando o ip publisco da vm no arquivo hosts
+  loop: "{{ pip_results.results }}"
+  
+- name: Adicionando o ip publico da vm no arquivo hosts
   delegate_to: localhost
   become: true
   lineinfile:
@@ -80,3 +81,12 @@
     regexp: '^{{ vm_01 }}\s'
     line: "{{ vm_01  }} ansible_host={{ vm_public_ip }} ansible_user={{ admin_user }} ansible_ssh_pass={{ admin_password }} ansible_python_interpreter=/usr/bin/python3" 
     #backup: yes
+
+- name: Adicionando o ip privado da vm no arquivo hosts
+  delegate_to: localhost
+  become: true
+  lineinfile:
+    path: "{{ playbook_dir }}/hosts"
+    insertafter: "[kubernetes]" 
+    regexp: '^{{ vm_01 }}\s'
+    line: "{{ vm_01  }} ansible_host={{ vm_private_ip }} ansible_user={{ admin_user }} ansible_ssh_pass={{ admin_password }} ansible_python_interpreter=/usr/bin/python3" 
