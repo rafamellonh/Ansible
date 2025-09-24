@@ -3,5 +3,7 @@ localhost ansible_connection=local ansible_python_interpreter=/home/rafael/venv-
                                                               
                                    
 [kubernetes]
-instance01 ansible_host=192.168.1.4 ansible_user=rafaeladmin ansible_ssh_pass=YourP@ssw0rd1234 ansible_python_interpreter=/usr/bin/python3
+instance_1 ansible_host=172.190.241.41 ansible_user=rafaeladmin
+instance_2 ansible_host=172.172.148.152 ansible_user=rafaeladmin
+instance_3 ansible_host=172.191.41.193 ansible_user=rafaeladmin
 

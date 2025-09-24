@@ -4,7 +4,7 @@
   azure.azcollection.azure_rm_publicipaddress:
     resource_group: "{{ resource_group }}"
     allocation_method: Static
-    name: "pip_{{ item }}"
+    name: "pip_instance_{{ item }}"
     location: "{{ location }}"
   loop: "{{ vm_ids }}"
   
@@ -16,6 +16,8 @@
     name: "public_ip_instance_{{ item }}"
   register: pip_results
   loop: "{{ vm_ids }}"
+  retries: 10
+  delay: 6
 
 - name: Create Network Interface for instane 01
   delegate_to: localhost
@@ -28,7 +30,7 @@
     location: "{{ location }}"
     ip_configurations:
       - name: "ipconfig_{{ item }}"
-        public_ip_address_name: "public_ip_instance_{{ item }}"
+        public_ip_address_name: "pip_instance_{{ item }}"
         private_ip_allocation_method: Dynamic
   loop: "{{ vm_ids }}"
 
@@ -45,7 +47,7 @@
   delegate_to: localhost
   azure.azcollection.azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
-    name: "instance_{{ item }}"
+    name: "instance-{{ item }}"
     vm_size: "{{ size_instances }}"
     admin_username: "{{ admin_user }}"
     admin_password: "{{ admin_password }}"
@@ -79,14 +81,17 @@
     path: "{{ playbook_dir }}/hosts"
     insertafter: "[kubernetes]" 
     regexp: '^{{ vm_01 }}\s'
-    line: "{{ vm_01  }} ansible_host={{ vm_public_ip }} ansible_user={{ admin_user }} ansible_ssh_pass={{ admin_password }} ansible_python_interpreter=/usr/bin/python3" 
-    #backup: yes
+    line: "instance_{{ item.item }} ansible_host={{ item.publicipaddresses[0].ip_address }} ansible_user={{ admin_user }}"
+  loop: "{{ pip_results.results }}"
+  loop_control:
+    label: "instance_{{ item.item }} => {{ (item.publicipaddresses | first).ip_address }}"
+ # unsafe_writes: yes
 
-- name: Adicionando o ip privado da vm no arquivo hosts
-  delegate_to: localhost
-  become: true
-  lineinfile:
-    path: "{{ playbook_dir }}/hosts"
-    insertafter: "[kubernetes]" 
-    regexp: '^{{ vm_01 }}\s'
-    line: "{{ vm_01  }} ansible_host={{ vm_private_ip }} ansible_user={{ admin_user }} ansible_ssh_pass={{ admin_password }} ansible_python_interpreter=/usr/bin/python3" 
+#- name: Adicionando o ip privado da vm no arquivo hosts
+ # delegate_to: localhost
+  #become: true
+  #lineinfile:
+  #  path: "{{ playbook_dir }}/hosts"
+   # insertafter: "[kubernetes]" 
+    #regexp: '^{{ vm_01 }}\s'
+    #line: "{{ vm_01  }} ansible_host={{ vm_private_ip }} ansible_user={{ admin_user }} ansible_ssh_pass={{ admin_password }} ansible_python_interpreter=/usr/bin/python3" 

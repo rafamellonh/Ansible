@@ -13,12 +13,6 @@ vnet_address_prefix : "192.168.0.0/16"
 subnet_name : "subnet-k8s-cluster"
 subnet_address_prefix : "192.168.1.0/24"
 
-#vms
-vm_01 : "instance01"
-vm_02 : "instance02"
-vm_03 : "instance03"
-
-
 #Nics
 nic_instance_01 : "nic_instance_01"
 nic_instance_02 : "nic_instance_02"
@@ -38,3 +32,10 @@ admin_password : "YourP@ssw0rd1234"
 
 #PIP
 public_ip_instance_01 : "pip_instance_01"
+
+
+#LOOP VMS
+vm_ids:
+  - 01
+  - 02
+  - 03
