@@ -3,17 +3,25 @@
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1'))
 ```
 Esse script:
-
-✔ configura WinRM
-
-✔ cria listeners
-
-✔ ajusta firewall
-
-✔ ativa autenticação necessária
+* configura WinRM
+* cria listeners
+* ajusta firewall
+* ativa autenticação necessária
 
 
+###Exemplo
+```
+[windows]
+win01 ansible_host=192.168.1.50
 
+[windows:vars]
+ansible_user=rafael
+ansible_password="abc,123"
+ansible_connection=winrm
+ansible_winrm_transport=ntlm
+ansible_port=5985
+ansible_winrm_server_cert_validation=ignore
+```
 
 
 ### Portas
