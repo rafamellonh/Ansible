@@ -1,3 +1,24 @@
+
+### Modo seguro
+
+```
+mkdir -p group_vars
+vim group_vars/linux.yml  (nome do grupo no inventory tem que ser o nome do vault)
+
+#Adicione isso no arquivo
+ansible_become: true
+ansible_become_method: sudo
+ansible_become_password: "abc,123"
+
+#Criptografar o arquivo com Ansible Vault
+ansible-vault encrypt group_vars/linux.yml
+
+#Testar se a variável está sendo carregada
+ansible linux -i inventory -m debug -a "var=ansible_become_password" --ask-vault-pass
+
+```
+ 
+
 ### Nao usar em ambiente produtivo
 *   Edite o arquivo : 
     ```
