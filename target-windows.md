@@ -5,8 +5,11 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercon
 Esse script:
 
 ✔ configura WinRM
+
 ✔ cria listeners
+
 ✔ ajusta firewall
+
 ✔ ativa autenticação necessária
 
 
