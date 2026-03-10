@@ -1,3 +1,18 @@
+### O projeto Ansible fornece um script oficial para configurar WinRM automaticamente.
+```
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1'))
+```
+Esse script:
+
+✔ configura WinRM
+✔ cria listeners
+✔ ajusta firewall
+✔ ativa autenticação necessária
+
+
+
+
+
 ### Portas
 * HTTP : 5985
 * HTTPS: 5986
