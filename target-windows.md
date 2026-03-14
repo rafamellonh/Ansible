@@ -1,3 +1,104 @@
+
+# Configurar suporte a Windows no Ansible (Linux Control Node)
+
+Este procedimento prepara o Linux para gerenciar servidores Windows via **WinRM** usando Ansible.
+
+## 1. Atualizar repositórios
+
+```bash
+sudo apt update
+```
+
+## 2. Instalar pip para Python 3
+
+```bash
+sudo apt install python3-pip -y
+```
+
+Verificar instalação:
+
+```bash
+pip3 --version
+```
+
+---
+
+## 3. Instalar biblioteca WinRM necessária para Ansible
+
+O Ansible utiliza a biblioteca **pywinrm** para comunicação com Windows.
+
+```bash
+pip3 install pywinrm
+```
+
+Ou instalar com suporte adicional (recomendado):
+
+```bash
+pip3 install "pywinrm[credssp]"
+```
+
+---
+
+## 4. Verificar se a biblioteca foi instalada
+
+```bash
+python3 -m pip list | grep winrm
+```
+
+Saída esperada:
+
+```
+pywinrm
+requests-ntlm
+```
+
+---
+
+## 5. Testar conexão com um host Windows
+
+Executar:
+
+```bash
+ansible windows -i inventory -m ansible.windows.win_ping
+```
+
+Saída esperada:
+
+```
+vm-windows01 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+---
+
+## Resumo das dependências instaladas
+
+| Componente | Função |
+|---|---|
+Python3 | Linguagem usada pelo Ansible |
+pip3 | Gerenciador de pacotes Python |
+pywinrm | Comunicação com Windows via WinRM |
+requests-ntlm | Autenticação NTLM |
+
+---
+
+## Arquitetura
+
+```
+Linux (Control Node)
+│
+├─ Ansible
+├─ Python
+├─ pip
+└─ pywinrm
+      │
+      │ WinRM (porta 5985)
+      ▼
+Windows Server
+```
+
 ### O projeto Ansible fornece um script oficial para configurar WinRM automaticamente.
 ```
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1'))
