@@ -1,9 +1,0 @@
-- name: Create Virtual Network and NSG
-  import_tasks: network.yml
-  tags:
-    - network
-  
-- name: Create Virtual Machine
-  import_tasks: virtualMachine.yml
-  tags:
-    - virtual-machine
