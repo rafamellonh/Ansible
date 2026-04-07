@@ -2,6 +2,17 @@
 - name: Create Hyper-V VMs
   hosts: hyperv
   gather_facts: false
-
   roles:
     - role: create-vms-hv
+  tags: create-vms
+
+- name: configure vms
+  hosts: created_vms
+  pre_tasks:
+    - name: wait for ssh
+      wait_for_connection:
+        delay: 10
+        timeout: 100        
+  roles:
+    - role: configure-vms
+  tags: configure-vms

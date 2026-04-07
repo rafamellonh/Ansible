@@ -1,0 +1,6 @@
+---
+# handlers file for configure-vms
+- name: Restart-VM
+  become: true
+  reboot:
+    reboot_timeout: 60

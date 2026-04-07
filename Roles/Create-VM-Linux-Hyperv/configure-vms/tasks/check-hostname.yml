@@ -1,0 +1,11 @@
+- name:  ler hostname
+  command: hostname  
+  register: hostname_result
+  #changed_when: false
+  retries: 10
+  delay: 10
+  until: hostname_result.stdout != ""
+
+- name: Exibir hostname
+  debug:
+    msg: "New hostname {{ hostname_result.stdout}}"

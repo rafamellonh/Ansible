@@ -1,0 +1,9 @@
+---
+# tasks file for configure-vms
+- name : import tasks configure-vms
+  import_tasks: configure-hostname.yml
+
+- meta: flush_handlers
+
+- name: import tasks check-hostname
+  import_tasks: check-hostname.yml

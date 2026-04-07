@@ -1,0 +1,6 @@
+---
+- name : Configure hostname
+  become: true
+  hostname:
+    name: "{{ inventory_hostname}}"
+  notify: Restart-VM

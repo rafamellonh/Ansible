@@ -1,96 +1,173 @@
 # Hyper-V VM Automation with Ansible
 
-This repository creates and configures VMs on Hyper-V from a parent disk (`parent_disk`), starts the VM, waits for an IP address, and writes the result to a separate inventory file so it can be used later by other roles or playbooks.
+This repository automates the full lifecycle of a guest VM on Hyper-V:
 
-## What This Project Does
+1. create the VM from a parent disk;
+2. start it and wait for an IP address;
+3. register the new guest in inventory;
+4. connect to the guest over SSH;
+5. configure the guest hostname.
 
-The main play in [`playbook.yml`](playbook.yml) runs the [`create-vms-hv`](create-vms-hv) role, which currently follows this flow:
+The automation is split into two roles that are orchestrated by [`playbook.yml`](playbook.yml):
 
-1. Create the VM directory on the Hyper-V host.
-2. Check whether the VM disk already exists.
-3. Create a differencing child disk from the parent disk.
-4. Create the VM in Hyper-V.
-5. Configure CPU, memory, and integration services.
-6. Start the VM through a handler.
-7. Wait for the VM to obtain an IP address.
-8. Write the IP to [`inventory-created.ini`](inventory-created.ini).
+- [`create-vms-hv`](create-vms-hv/README.md): creates and boots the VM on the Hyper-V host.
+- [`configure-vms`](configure-vms/README.md): connects to the Linux guest and sets its hostname from the inventory name.
+
+## End-to-End Flow
+
+The current playbook runs two plays in sequence:
+
+1. Run [`create-vms-hv`](create-vms-hv/README.md) on the `hyperv` group.
+2. Create the VM directory, differencing disk, and VM definition.
+3. Configure CPU, memory, and integration services.
+4. Start the VM through a handler.
+5. Query Hyper-V for the guest IP address.
+6. Write the discovered guest to [`inventory-created.ini`](inventory-created.ini).
+7. Add the guest to the in-memory Ansible inventory with `add_host`.
+8. Run [`configure-vms`](configure-vms/README.md) on the `created_vms` group in the same `ansible-playbook` execution.
+9. Wait for SSH connectivity to the guest.
+10. Set the Linux hostname to `inventory_hostname`, reboot if needed, and print the resulting hostname.
+
+Because the guest is added with `add_host`, the second play can run immediately after creation without requiring a second command.
+
+## Repository Layout
+
+- [`playbook.yml`](playbook.yml): entry point that chains VM creation and guest configuration.
+- [`inventory`](inventory): main inventory used to reach the Hyper-V host.
+- [`inventory-created.ini`](inventory-created.ini): generated inventory with created guests and their IPs.
+- [`create-vms-hv`](create-vms-hv/README.md): role responsible for Hyper-V-side operations.
+- [`configure-vms`](configure-vms/README.md): role responsible for guest-side configuration.
 
 ## Prerequisites
 
 Before running the playbook, make sure the following are in place:
 
-- The Hyper-V host must be reachable through WinRM.
-- A `vSwitch` named `vswitch` must already exist on the Hyper-V host.
-- The parent disk defined in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml) must exist before execution.
-- The parent disk must already be updated and ready to be cloned as the base image for new VMs.
-- The Linux image used as the parent disk must have the following packages installed so Hyper-V can expose the guest IP address afterward:
+- The Hyper-V host is reachable through WinRM.
+- A virtual switch named `vswitch` already exists on the Hyper-V host.
+- The parent disk defined in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml) already exists.
+- The parent disk is updated and ready to be cloned as the base image.
+- The Linux image used as the parent disk has Hyper-V guest tools installed so Hyper-V can report the VM IP.
+- The Linux image allows SSH access for the user you plan to use in the guest.
+- The Linux guest user has sudo privileges required for hostname changes and reboot.
+
+Example packages for Ubuntu-based guest images:
 
 ```bash
 sudo apt update
-sudo apt install linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
+sudo apt install linux-tools-$(uname -r) linux-cloud-tools-$(uname -r) openssh-server
 sudo reboot
 ```
 
-Without these packages in the system used to build the parent disk, `Get-VMNetworkAdapter` may not return the VM IP correctly.
+Without the Hyper-V tools, `Get-VMNetworkAdapter` may not return the guest IP correctly.
 
 ## Inventories
 
-This project uses two inventories with different purposes:
+This project currently uses two inventory files:
 
-- [`inventory.ini`](inventory.ini.example): input inventory used to connect to the Hyper-V host through WinRM. You should create your own `inventory.ini` from this example.
-- [`inventory-created.ini`](inventory-created.ini): inventory generated during execution with the created VMs and their IPs. This file can be reused by another role or playbook later.
+- [`inventory`](inventory): static input inventory used to connect to the Hyper-V host.
+- [`inventory-created.ini`](inventory-created.ini): file updated during execution with the guests discovered by Hyper-V.
 
-Example `inventory.ini`:
+Example [`inventory`](inventory):
 
 ```ini
 [hyperv]
-hyperv-host ansible_host=192.168.1.10
+192.168.40.76
 
 [hyperv:vars]
-ansible_connection=winrm
 ansible_user=Administrator
 ansible_password=CHANGE_ME
-ansible_port=5986
+ansible_connection=winrm
 ansible_winrm_transport=ntlm
+ansible_port=5985
 ansible_winrm_server_cert_validation=ignore
+
+[created_vms]
 ```
 
-## Main Variables
+`inventory-created.ini` is useful as a record of what was created, but the same run does not depend on re-reading that file. The second play works because the first role also adds the guest to the runtime inventory with `add_host`.
 
-The current variables are defined in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml):
+## Roles
+
+### `create-vms-hv`
+
+This role runs on the Hyper-V host and is responsible for:
+
+- creating the VM directory;
+- creating the differencing disk from `parent_disk`;
+- creating the VM;
+- applying CPU, memory, and integration-service settings;
+- starting the VM;
+- discovering the guest IP address;
+- recording the guest in [`inventory-created.ini`](inventory-created.ini);
+- adding the guest to the in-memory `created_vms` group.
+
+Main variables defined in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml):
 
 - `vm_name`: name of the VM to create.
-- `vm_root`: base directory where VMs will be stored on the Hyper-V host.
-- `parent_disk`: path to the parent disk used to create the differencing disk.
-- `vm_disk`: final path of the VM disk.
+- `vm_root`: base directory for VM files on the Hyper-V host.
+- `parent_disk`: path to the parent VHDX used as the source image.
+- `vm_disk`: final path of the guest differencing disk.
+
+### `configure-vms`
+
+This role runs on the created guest VM and is responsible for:
+
+- setting the guest hostname to `inventory_hostname`;
+- rebooting the guest when the hostname changes;
+- checking and printing the resulting hostname.
+
+The role currently does not define custom variables. It relies on:
+
+- `inventory_hostname` as the desired hostname;
+- SSH connection variables available to the `created_vms` hosts.
+
+## Playbook
+
+Current [`playbook.yml`](playbook.yml):
+
+```yaml
+---
+- name: Create Hyper-V VMs
+  hosts: hyperv
+  gather_facts: false
+  roles:
+    - role: create-vms-hv
+  tags: create-vms
+
+- name: configure vms
+  hosts: created_vms
+  pre_tasks:
+    - name: wait for ssh
+      wait_for_connection:
+        delay: 10
+        timeout: 100
+  roles:
+    - role: configure-vms
+  tags: configure-vms
+```
 
 ## How to Run
 
-1. Create `inventory.ini` with the Hyper-V host connection details.
-2. Adjust the variables in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml).
-3. Confirm that the parent disk already exists and is up to date.
-4. Run:
+1. Update [`inventory`](inventory) with the Hyper-V connection details.
+2. Adjust the VM variables in [`create-vms-hv/vars/main.yml`](create-vms-hv/vars/main.yml).
+3. Confirm that the parent disk exists and is ready to be used as a template.
+4. Run the full workflow:
 
 ```bash
-ansible-playbook -i inventory.ini playbook.yml
+ansible-playbook -i inventory playbook.yml
 ```
 
-## How IP Discovery Works
+Standalone tag-based runs are also possible, but the inventory must already contain the group targeted by that play:
 
-A task in [`create-vms-hv/tasks/get-ip-and-configure-hosts.yml`](create-vms-hv/tasks/get-ip-and-configure-hosts.yml) queries Hyper-V with `Get-VMNetworkAdapter`, looks for an IP in the `192.168.40.x` range, retries until the VM responds, and then writes the entry to `inventory-created.ini`.
+```bash
+ansible-playbook -i inventory playbook.yml --tags create-vms
+```
 
-If your network uses a different range, update the IP filter in that task.
+For `configure-vms`, use an inventory that already has the `created_vms` hosts available.
 
-## Main Structure
+## Important Notes
 
-- [`playbook.yml`](playbook.yml): entry point for the automation.
-- [`create-vms-hv/tasks/create-vm.yml`](create-vms-hv/tasks/create-vm.yml): creates the directory, disk, and VM.
-- [`create-vms-hv/tasks/configure-vm.yml`](create-vms-hv/tasks/configure-vm.yml): applies VM settings and schedules the start.
-- [`create-vms-hv/tasks/main.yml`](create-vms-hv/tasks/main.yml): organizes task order and forces handler execution before IP discovery.
-- [`create-vms-hv/tasks/get-ip-and-configure-hosts.yml`](create-vms-hv/tasks/get-ip-and-configure-hosts.yml): waits for the IP and writes the generated inventory.
-- [`create-vms-hv/handlers/main.yml`](create-vms-hv/handlers/main.yml): starts the VM.
-
-## Notes
-
-- The generated inventory currently stores only `name` and `ansible_host`. If the next role also needs `ansible_user`, an SSH key, or other parameters, add them to the format written to `inventory-created.ini`.
-- The role is currently set up for a simple flow based on fixed variables in `vars/main.yml`. For multiple VMs, the next step would be to evolve it to a VM list and iterate with `loop`.
+- If the guest requires explicit SSH parameters such as `ansible_user`, `ansible_ssh_private_key_file`, or `ansible_port`, add them both to the generated line in [`create-vms-hv/tasks/get-ip-and-configure-hosts.yml`](create-vms-hv/tasks/get-ip-and-configure-hosts.yml) and to the `add_host` task in the same file.
+- The current IP discovery filter looks for addresses in the `192.168.40.x` range. Update the regular expression in [`create-vms-hv/tasks/get-ip-and-configure-hosts.yml`](create-vms-hv/tasks/get-ip-and-configure-hosts.yml) if your network uses a different range.
+- If you clone multiple Linux VMs from the same parent disk, make sure the guest image regenerates its SSH host keys to avoid host key conflicts.
+- The current role variables are defined for a single VM. To create multiple guests in one run, the next step would be to change `vm_name` and related variables into a list and loop over them.

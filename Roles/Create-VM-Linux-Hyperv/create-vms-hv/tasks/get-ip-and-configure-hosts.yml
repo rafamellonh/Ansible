@@ -32,3 +32,10 @@
     line: " {{ vm_name }} ansible_host={{ vm_ip.stdout | trim }}"
     state: present
   delegate_to: localhost
+
+
+- name: Add vm to runtime inventory
+  add_host:
+    name: "{{ vm_name }}"
+    groups: created_vms
+    ansible_host: "{{ vm_ip.stdout | trim }}"
