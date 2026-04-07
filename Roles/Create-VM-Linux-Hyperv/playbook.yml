@@ -1,0 +1,7 @@
+---
+- name: Create Hyper-V VMs
+  hosts: hyperv
+  gather_facts: false
+
+  roles:
+    - role: create-vms-hv

@@ -1,0 +1,4 @@
+vm_name: test02
+vm_root: d:\vms
+parent_disk: d:\vms\vm-ubuntu-start\vm-ubuntu-start.vhdx
+vm_disk: "{{ vm_root }}\\{{ vm_name }}\\{{ vm_name }}.vhdx"

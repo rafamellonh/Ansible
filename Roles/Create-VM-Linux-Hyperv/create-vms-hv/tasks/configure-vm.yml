@@ -1,0 +1,15 @@
+- name: Configure VM
+  win_shell: |
+    Set-VM `
+      -Name "{{ vm_name }}" `
+      -ProcessorCount 4 `
+      -DynamicMemory `
+      -MemoryMinimumBytes 512MB `
+      -MemoryMaximumBytes 2GB `
+      -CheckpointType Disabled
+
+- name: Configure guest services
+  win_shell:
+    get-vmintegrationservice -vmname "{{ vm_name }}" | where-object { -not $_.enabled } | enable-vmintegrationservice
+  register: guest_services
+  notify: Start VM

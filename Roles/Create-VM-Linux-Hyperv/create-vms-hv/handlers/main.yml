@@ -1,0 +1,8 @@
+---
+- name: Start VM
+  win_shell: |
+    $vmName = "{{ vm_name }}"
+    Start-VM -Name $vmName
+  args:
+    executable: powershell
+  register: start_vm_result

@@ -1,0 +1,9 @@
+Faltavam os pacotes linux-cloud-tools compatíveis com o kernel
+
+Solução:
+
+sudo apt update
+sudo apt install linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
+sudo reboot
+
+

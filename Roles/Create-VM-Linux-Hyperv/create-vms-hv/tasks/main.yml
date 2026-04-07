@@ -1,0 +1,11 @@
+---
+- name: Importa task create vms
+  import_tasks: create-vm.yml
+
+- name: Importa task configure vms
+  import_tasks: configure-vm.yml
+
+- meta: flush_handlers
+
+- name: Importa task get ip and configure hosts
+  import_tasks: get-ip-and-configure-hosts.yml
